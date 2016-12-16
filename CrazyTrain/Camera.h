@@ -21,6 +21,8 @@ const GLfloat SPEED      =  4.5f;
 const GLfloat SENSITIVTY =  0.5f;
 const GLfloat ZOOM       =  45.0f;
 
+extern const GLuint WIDTH, HEIGHT;
+
 
 // An abstract camera class that processes input and calculates the corresponding Eular Angles, Vectors and Matrices for use in OpenGL
 class Camera
@@ -64,6 +66,11 @@ public:
     {
         return glm::lookAt(this->Position, this->Position + this->Front, this->Up);
     }
+
+	glm::mat4 GetProjectionMatrix()
+	{
+		return glm::perspective(Zoom, (GLfloat)WIDTH / HEIGHT, 0.1f, 100.0f);
+	}
 
     // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
     void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)

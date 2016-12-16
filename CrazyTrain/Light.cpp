@@ -44,13 +44,18 @@ GLfloat Light::vertices[] = {
 	-0.5f,  0.5f, -0.5f,
 };
 
-Light::Light() {
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
+Light::Light(Shader* shader, Camera* camera) {
+	shader_ = shader;
+	camera_ = camera;
 
-	glBindVertexArray(VAO);
+	GetUniformLocations();
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glGenVertexArrays(1, &vao_);
+	glGenBuffers(1, &vbo_);
+
+	glBindVertexArray(vao_);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	// Position attribute
@@ -64,29 +69,27 @@ Light::Light() {
 
 
 Light::~Light() {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	glDeleteVertexArrays(1, &vao_);
+	glDeleteBuffers(1, &vbo_);
 }
 
 void Light::Draw() const {
-	glBindVertexArray(VAO);
+	glBindVertexArray(vao_);
+
+	shader_->Use();
+
+	glm::mat4 view_matrix = camera_->GetViewMatrix();
+	glm::mat4 projection_matrix = camera_->GetProjectionMatrix();
 
 	// no internal transformations for now
 	//	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelTrans));
 
-	glUniformMatrix4fv(model_location, 1, GL_FALSE, model_ptr_);
-	glUniformMatrix4fv(view_location, 1, GL_FALSE, view_ptr_);
-	glUniformMatrix4fv(projection_location, 1, GL_FALSE, projection_ptr_);
+	glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model_));
+	glUniformMatrix4fv(view_location, 1, GL_FALSE, glm::value_ptr(view_matrix));
+	glUniformMatrix4fv(projection_location, 1, GL_FALSE, glm::value_ptr(projection_matrix));
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	// all is drawn - unbind vertex array
 	glBindVertexArray(0);
-}
-
-void Light::AttachMatrices(
-	const glm::mat4& view,
-	const glm::mat4& projection) {
-	view_ptr_ = glm::value_ptr(view);
-	projection_ptr_ = glm::value_ptr(projection);
 }

@@ -75,41 +75,22 @@ int main()
 	// OpenGL options
 	glEnable(GL_DEPTH_TEST);
 
-	// Build and compile our shader program
-	//Shader lightingShader("basic_lighting.vs", "basic_lighting.frag");
-	//Shader lampShader("lamp.vs", "lamp.frag");
+	Shader shader_cube("basic_lighting.vs", "basic_lighting.frag");
+	Shader shader_light("lamp.vs", "lamp.frag");
 
-	Cube cube;
-	Cube cube2;
-	Light light;
-
-	cube.shader_.LoadVertexShader("basic_lighting.vs");
-	cube.shader_.LoadFragmentShader("basic_lighting.frag");
-	cube.shader_.CompileShaders();
-	cube.GetUniformLocations();
-
-	cube2.shader_.LoadVertexShader("basic_lighting.vs");
-	cube2.shader_.LoadFragmentShader("basic_lighting.frag");
-	cube2.shader_.CompileShaders();
-	cube2.GetUniformLocations();
-
-	light.shader_.LoadVertexShader("lamp.vs");
-	light.shader_.LoadFragmentShader("lamp.frag");
-	light.shader_.CompileShaders();
-	light.GetUniformLocations();
-
-
-	glm::mat4 view;
-	glm::mat4 projection;
-
-	cube.AttachMatrices(view, projection);
-	cube2.AttachMatrices(view, projection);
-	light.AttachMatrices(view, projection);
+	Cube cube(&shader_cube, &camera, lightPos);
+	Cube cube2(&shader_cube, &camera, lightPos);
+	Light light(&shader_light, &camera);
 
 	cube.setModelMatrix(glm::mat4()); // BUG !!!!!!!!!!!!!!!!!!!!!!
 
 	glm::mat4 second_model = glm::translate(glm::mat4(), glm::vec3(12.2f, 3.0f, 2.0f));
 	cube2.setModelMatrix(second_model);
+
+	glm::mat4 LightModel;
+	LightModel = glm::translate(LightModel, lightPos);
+	LightModel = glm::scale(LightModel, glm::vec3(0.2f)); // Make it a smaller cube
+	light.setModelMatrix(LightModel);
 	
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -124,47 +105,41 @@ int main()
 		do_movement();
 
 		// Create camera transformations
-		view = camera.GetViewMatrix();
-		projection = glm::perspective(camera.Zoom, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+		//view = camera.GetViewMatrix();
+		//projection = glm::perspective(camera.Zoom, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
 
 		// Clear the colorbuffer
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 		// Use cooresponding shader when setting uniforms/drawing objects
-		cube.shader_.Use();
-		GLint objectColorLoc = glGetUniformLocation(cube.shader_.GetProgram(), "objectColor");
-		GLint lightColorLoc = glGetUniformLocation(cube.shader_.GetProgram(), "lightColor");
-		GLint lightPosLoc = glGetUniformLocation(cube.shader_.GetProgram(), "lightPos");
-		GLint viewPosLoc = glGetUniformLocation(cube.shader_.GetProgram(), "viewPos");
-		glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);
-		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
-		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
-		glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
+		//GLint objectColorLoc = glGetUniformLocation(cube.shader_.GetProgram(), "objectColor");
+		//GLint lightColorLoc = glGetUniformLocation(cube.shader_.GetProgram(), "lightColor");
+		//GLint lightPosLoc = glGetUniformLocation(cube.shader_.GetProgram(), "lightPos");
+		//GLint viewPosLoc = glGetUniformLocation(cube.shader_.GetProgram(), "viewPos");
+		//cube.shader_.Use();
+		//glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);
+		//glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
+		//glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
+		//glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
 		cube.Draw();
 
-
-
-		cube2.shader_.Use();
-		objectColorLoc = glGetUniformLocation(cube2.shader_.GetProgram(), "objectColor");
-		lightColorLoc = glGetUniformLocation(cube2.shader_.GetProgram(), "lightColor");
-		lightPosLoc = glGetUniformLocation(cube2.shader_.GetProgram(), "lightPos");
-		viewPosLoc = glGetUniformLocation(cube2.shader_.GetProgram(), "viewPos");
-		glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);
-		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
-		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
-		glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
+		//objectColorLoc = glGetUniformLocation(cube2.shader_.GetProgram(), "objectColor");
+		//lightColorLoc = glGetUniformLocation(cube2.shader_.GetProgram(), "lightColor");
+		//lightPosLoc = glGetUniformLocation(cube2.shader_.GetProgram(), "lightPos");
+		//viewPosLoc = glGetUniformLocation(cube2.shader_.GetProgram(), "viewPos");
+		//cube2.shader_.Use();
+		//glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);
+		//glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
+		//glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
+		//glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
 		cube2.Draw();
 
 
 		// Also draw the lamp object, again binding the appropriate shader
-		light.shader_.Use();  // ???
+		//light.shader_.Use();  // ???
 
-		glm::mat4 LightModel;
-		LightModel = glm::translate(LightModel, lightPos);
-		LightModel = glm::scale(LightModel, glm::vec3(0.2f)); // Make it a smaller cube
 
-		light.setModelMatrix(LightModel);
 		light.Draw();
 		
 		// Swap the screen buffers

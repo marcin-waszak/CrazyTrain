@@ -11,10 +11,6 @@
 class Shader
 {
 public:
-	Shader() {
-
-	}
-
     Shader(const GLchar* vertexPath, const GLchar* fragmentPath) {
         try
         {
@@ -28,14 +24,21 @@ public:
 
 		CompileShaders();
     }
+
     // Uses the current shader
-    void Use() {
+    void Use() const {
 		glUseProgram(this->program_);
 	}
 
 	GLuint GetProgram() const {
 		return program_;
 	}
+
+private:
+	std::string vertex_code_;
+	std::string fragment_code_;
+
+	GLuint program_;
 
 	void LoadVertexShader(const char* path) {
 		std::ifstream vShaderFile;
@@ -90,12 +93,6 @@ public:
 		glDeleteShader(vertex);
 		glDeleteShader(fragment);
 	}
-
-private:
-	std::string vertex_code_;
-	std::string fragment_code_;
-
-	GLuint program_;
 
     void checkCompileErrors(GLuint shader, std::string type)
 	{

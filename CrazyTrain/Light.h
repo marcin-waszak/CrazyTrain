@@ -6,13 +6,8 @@ class Light : public Model {
 	static GLfloat vertices[];
 
 public:
-	Light();
+	Light(Shader* shader, Camera* camera);
 	~Light();
 
 	void Draw() const override;
-
-	void AttachMatrices(
-		const glm::mat4& view,
-		const glm::mat4& projection
-	) override;
 };
