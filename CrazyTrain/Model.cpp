@@ -1,23 +1,21 @@
 #include "Model.h"
 
-glm::mat4 Model::getModelMatrix() {
+glm::mat4 Model::GetModelMatrix() {
 	return model_;
 }
 
-void Model::setModelMatrix(glm::mat4 model) {
+void Model::SetModelMatrix(glm::mat4 model) {
 	model_ = model;
 }
 
 void Model::GetUniformLocations() {
 	shader_->Use();
 
-	// Get the uniform locations
-	model_location = glGetUniformLocation(shader_->GetProgram(), "model");
-	view_location = glGetUniformLocation(shader_->GetProgram(), "view");
-	projection_location = glGetUniformLocation(shader_->GetProgram(), "projection");
-
-	objectColorLoc = glGetUniformLocation(shader_->GetProgram(), "objectColor");
-	lightColorLoc = glGetUniformLocation(shader_->GetProgram(), "lightColor");
-	lightPosLoc = glGetUniformLocation(shader_->GetProgram(), "lightPos");
-	viewPosLoc = glGetUniformLocation(shader_->GetProgram(), "viewPos");
+	model_location_ = glGetUniformLocation(shader_->GetProgram(), "model");
+	view_location_ = glGetUniformLocation(shader_->GetProgram(), "view");
+	projection_location_ = glGetUniformLocation(shader_->GetProgram(), "projection");
+	object_color_location_ = glGetUniformLocation(shader_->GetProgram(), "objectColor");
+	light_color_location_ = glGetUniformLocation(shader_->GetProgram(), "lightColor");
+	light_position_location_ = glGetUniformLocation(shader_->GetProgram(), "lightPos");
+	view_position_location_ = glGetUniformLocation(shader_->GetProgram(), "viewPos");
 }

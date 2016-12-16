@@ -10,28 +10,26 @@
 class Model {
 protected:
 	GLuint vao_;
-	GLuint vbo_;	
+	GLuint vbo_;
+
+	Shader* shader_;
+	Camera* camera_; // unnecessary in light class
+	glm::vec3 light_position_;
 
 	glm::mat4 model_; // must init !!!!
 
-	GLint model_location;
-	GLint view_location;
-	GLint projection_location;
+	GLint model_location_;
+	GLint view_location_;
+	GLint projection_location_;
+	GLint object_color_location_;
+	GLint light_color_location_;
+	GLint light_position_location_;
+	GLint view_position_location_;
 
-	GLint objectColorLoc;
-	GLint lightColorLoc;
-	GLint lightPosLoc;
-	GLint viewPosLoc;
-
-	void GetUniformLocations();// priv
+	void GetUniformLocations();
 
 public:
-	Shader* shader_; // ????????
-	Camera* camera_; // niepotrzebne przy swietle
-	glm::vec3 light_position_;
-
 	virtual void Draw() const = 0;
-	glm::mat4 getModelMatrix();
-	void setModelMatrix(glm::mat4 model);
-	
+	glm::mat4 GetModelMatrix();
+	void SetModelMatrix(glm::mat4 model);
 };
