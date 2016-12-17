@@ -14,6 +14,7 @@ void Model::GetUniformLocations() {
 	model_location_ = glGetUniformLocation(shader_->GetProgram(), "model");
 	view_location_ = glGetUniformLocation(shader_->GetProgram(), "view");
 	projection_location_ = glGetUniformLocation(shader_->GetProgram(), "projection");
+	normal_matrix_location_ = glGetUniformLocation(shader_->GetProgram(), "normal_matrix");
 	object_color_location_ = glGetUniformLocation(shader_->GetProgram(), "objectColor");
 	light_color_location_ = glGetUniformLocation(shader_->GetProgram(), "lightColor");
 	light_position_location_ = glGetUniformLocation(shader_->GetProgram(), "lightPos");

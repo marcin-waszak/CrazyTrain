@@ -21,6 +21,7 @@ protected:
 	GLint model_location_;
 	GLint view_location_;
 	GLint projection_location_;
+	GLint normal_matrix_location_;
 	GLint object_color_location_;
 	GLint light_color_location_;
 	GLint light_position_location_;

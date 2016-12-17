@@ -79,6 +79,7 @@ Cube::~Cube() {
 void Cube::Draw() const {
 	glm::mat4 view_matrix = camera_->GetViewMatrix();
 	glm::mat4 projection_matrix = camera_->GetProjectionMatrix();
+	glm::mat3 normal_matrix = glm::transpose(glm::inverse(model_));
 
 	glBindVertexArray(vao_);
 	shader_->Use();
@@ -86,6 +87,7 @@ void Cube::Draw() const {
 	glUniformMatrix4fv(model_location_, 1, GL_FALSE, glm::value_ptr(model_));
 	glUniformMatrix4fv(view_location_, 1, GL_FALSE, glm::value_ptr(view_matrix));
 	glUniformMatrix4fv(projection_location_, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+	glUniformMatrix3fv(normal_matrix_location_, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 	glUniform3f(object_color_location_, 1.0f, 0.5f, 0.31f);
 	glUniform3f(light_color_location_, 1.0f, 1.0f, 1.0f);
 	glUniform3f(light_position_location_, light_position_.x, light_position_.y, light_position_.z);

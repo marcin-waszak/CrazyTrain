@@ -106,6 +106,9 @@ int main() {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		second_model = glm::rotate(second_model, .02f, glm::vec3(0.f, 1.f, 0.f));
+		cube2.SetModelMatrix(second_model);
+
 		cube.Draw();
 		cube2.Draw();
 		light.Draw();
@@ -118,8 +121,6 @@ int main() {
 	glfwTerminate();
 	return 0;
 }
-
-
 
 void do_movement() {
 	Input* input = Input::getInstance();
