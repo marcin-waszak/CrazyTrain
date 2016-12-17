@@ -17,7 +17,7 @@ enum CameraMovement {
 // Default camera values
 const GLfloat YAW = -90.0f;
 const GLfloat PITCH = 0.0f;
-const GLfloat SPEED = 4.5f;
+const GLfloat SPEED = 16.5f;
 const GLfloat SENSITIVTY = 0.5f;
 const GLfloat ZOOM = 45.0f;
 
@@ -80,7 +80,7 @@ public:
 	}
 
 	glm::mat4 GetProjectionMatrix() {
-		return glm::perspective(zoom_, (GLfloat)WIDTH / HEIGHT, 0.1f, 100.0f);
+		return glm::perspective(zoom_, (GLfloat)WIDTH / HEIGHT, 0.1f, 1000.0f);
 	}
 
 	void ProcessKeyboard(CameraMovement direction, GLfloat deltaTime) {

@@ -89,6 +89,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\libraries\glfw-3.2.1.bin.WIN64\include;C:\libraries\glew-2.0.0\include;C:\libraries\glm-0.9.8.3\include;C:\libraries\soil\src;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\libraries\glew-2.0.0\lib\Release\x64;C:\libraries\soil\projects\VC9\x64\Release;C:\libraries\glfw-3.2.1.bin.WIN64\lib-vc2015;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -98,7 +100,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\libraries\soil\src;C:\libraries\glm-0.9.8.3\include;C:\libraries\glew-2.0.0\include;C:\libraries\glfw-3.2.1.bin.WIN64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\libraries\soil\projects\VC9\x64\Release\SOIL.tlog;C:\libraries\glew-2.0.0\lib\Release\x64;C:\libraries\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\libraries\soil\projects\VC9\x64\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\libraries\soil\projects\VC9\x64\Release;C:\libraries\glew-2.0.0\lib\Release\x64;C:\libraries\glfw-3.2.1.bin.WIN64\lib-vc2015;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -124,6 +126,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

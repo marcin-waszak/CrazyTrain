@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
+#include <ctime>
 
 #include <GL/glew.h>
 
@@ -24,7 +26,7 @@
 void do_movement();
 
 // Window dimensions
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 1024, HEIGHT = 768;
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -43,6 +45,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", nullptr, nullptr);
@@ -72,18 +75,24 @@ int main() {
 	Input* input = Input::getInstance();
 	input->Initialize(&camera);
 
-
 	Shader shader_cube("basic_lighting.vs", "basic_lighting.frag");
-	Shader shader_light("lamp.vs", "lamp.frag");
+	Shader shader_light( "lamp.vs", "lamp.frag");
 
-	Cube cube(&shader_cube, &camera, light_position);
-	Cube cube2(&shader_cube, &camera, light_position);
+	srand(time(nullptr));
+
+	std::vector<Cube*> cubes;
+	for (int i = 0; i < 20; ++i)
+		cubes.push_back(new Cube(&shader_cube, &camera, light_position));
+
+	for (auto &cube : cubes) {
+		glm::mat4 trans = glm::translate(glm::mat4(),
+			glm::vec3(-10 + rand() % 20, -10 + rand() % 20, -10 + rand() % 20));
+		glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 1.f, 0.f));
+		glm::mat4 result = trans *rot;
+		cube->SetModelMatrix(result);
+	}
+
 	Light light(&shader_light, &camera);
-
-	cube.SetModelMatrix(glm::mat4()); // BUG !!!!!!!!!!!!!!!!!!!!!!
-
-	glm::mat4 second_model = glm::translate(glm::mat4(), glm::vec3(12.2f, 3.0f, 2.0f));
-	cube2.SetModelMatrix(second_model);
 
 	glm::mat4 light_model;
 	light_model = glm::translate(light_model, light_position);
@@ -106,13 +115,14 @@ int main() {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		second_model = glm::rotate(second_model, .02f, glm::vec3(0.f, 1.f, 0.f));
-		cube2.SetModelMatrix(second_model);
+		for (auto &cube : cubes)
+			cube->Draw();
 
-		cube.Draw();
-		cube2.Draw();
+		//second_model = glm::rotate(second_model, .02f, glm::vec3(0.f, 1.f, 0.f));
+		//cube2.SetModelMatrix(second_model);
+
 		light.Draw();
-		
+
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	}

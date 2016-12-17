@@ -88,10 +88,10 @@ void Cube::Draw() const {
 	glUniformMatrix4fv(view_location_, 1, GL_FALSE, glm::value_ptr(view_matrix));
 	glUniformMatrix4fv(projection_location_, 1, GL_FALSE, glm::value_ptr(projection_matrix));
 	glUniformMatrix3fv(normal_matrix_location_, 1, GL_FALSE, glm::value_ptr(normal_matrix));
-	glUniform3f(object_color_location_, 1.0f, 0.5f, 0.31f);
+	glUniform3f(object_color_location_, 1.0f, 0.5f, 0.81f);
 	glUniform3f(light_color_location_, 1.0f, 1.0f, 1.0f);
-	glUniform3f(light_position_location_, light_position_.x, light_position_.y, light_position_.z);
-	glUniform3f(view_position_location_, camera_->position_.x, camera_->position_.y, camera_->position_.z);
+	glUniform3fv(light_position_location_, 1, glm::value_ptr(light_position_));
+	glUniform3fv(view_position_location_, 1, glm::value_ptr(camera_->position_));
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
