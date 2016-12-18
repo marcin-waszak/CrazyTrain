@@ -11,7 +11,9 @@ enum CameraMovement {
 	FORWARD,
 	BACKWARD,
 	LEFT,
-	RIGHT
+	RIGHT,
+	UP,
+	DOWN,
 };
 
 // Default camera values
@@ -93,6 +95,10 @@ public:
 			position_ -= right_ * velocity;
 		if (direction == RIGHT)
 			position_ += right_ * velocity;
+		if (direction == UP)
+			position_ += glm::vec3(0.f, 1.f, 0.f) * velocity * .5f;
+		if (direction == DOWN)
+			position_ -= glm::vec3(0.f, 1.f, 0.f) * velocity * .5f;
 	}
 
 	void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch = true) {

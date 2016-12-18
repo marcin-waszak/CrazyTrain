@@ -25,10 +25,16 @@ protected:
 	GLint object_color_location_;
 	GLint light_color_location_;
 	GLint light_position_location_;
-	GLint view_position_location_;
 	GLint light_constant_location_;
 	GLint light_linear_location_;
 	GLint light_quadratic_location_;
+	GLint view_position_location_;
+
+	GLint light_ambient_location_;
+	GLint light_difuse_location_;
+	GLint light_specular_location_;
+
+
 
 	void GetUniformLocations();
 

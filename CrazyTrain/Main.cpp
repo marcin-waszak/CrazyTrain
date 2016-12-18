@@ -82,16 +82,65 @@ int main() {
 		"..\\..\\assets\\lamp.vs",
 		"..\\..\\assets\\lamp.frag");
 
+	// TEMPORARY HERE /////////////////////////////////////////////////
+	// Load textures
+	GLuint diffuseMap, specularMap, emissionMap;
+	glGenTextures(1, &diffuseMap);
+	glGenTextures(1, &specularMap);
+	glGenTextures(1, &emissionMap);
+	int width, height;
+	unsigned char* image;
+
+	// Diffuse map
+	image = SOIL_load_image("..\\..\\assets\\container2.png", &width, &height, 0, SOIL_LOAD_RGB);
+	glBindTexture(GL_TEXTURE_2D, diffuseMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(image);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+
+	// Specular map
+	image = SOIL_load_image("..\\..\\assets\\container2_specular.png", &width, &height, 0, SOIL_LOAD_RGB);
+	glBindTexture(GL_TEXTURE_2D, specularMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(image);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// Set texture units
+	shader_cube.Use();
+	glUniform1i(glGetUniformLocation(shader_cube.GetProgram(), "material_diffuse"), 0);
+	glUniform1i(glGetUniformLocation(shader_cube.GetProgram(), "material_specular"), 1);
+	glUniform1f(glGetUniformLocation(shader_cube.GetProgram(), "material_shininess"), 32.0f);
+
+	// Bind diffuse map
+	glActiveTexture(GL_TEXTURE0); // here ??????????
+	glBindTexture(GL_TEXTURE_2D, diffuseMap);
+	// Bind specular map
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, specularMap);
+
+	// TEMPORARY HERE /////////////////////////////////////////////////
+
 	srand(time(nullptr));
 
 	std::vector<Cube*> cubes;
 	for (int i = 0; i < 2500; ++i)
 		cubes.push_back(new Cube(&shader_cube, &camera, light_position));
 
+	int range = 120;
+
 	for (auto &cube : cubes) {
 		glm::mat4 trans = glm::translate(glm::mat4(),
-			glm::vec3(-50 + rand() % 100, -50 + rand() % 100, -50 + rand() % 100));
-		glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 1.f, 0.f));
+			glm::vec3(-range/2 + rand() % range, -range / 2 + rand() % range, -range / 2 + rand() % range));
+		glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 1.f, 0.0f));
 		glm::mat4 result = trans *rot;
 		cube->SetModelMatrix(result);
 	}
@@ -116,6 +165,7 @@ int main() {
 		do_movement();
 
 		// Clear the colorbuffer
+		//glClearColor(0.f, 0.f, 0.f, 1.0f);
 		glClearColor(0.01f, 0.01f, 0.03f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -148,4 +198,8 @@ void do_movement() {
 		camera.ProcessKeyboard(LEFT, delta_time);
 	if (input->IsPressed(GLFW_KEY_D))
 		camera.ProcessKeyboard(RIGHT, delta_time);
+	if (input->IsPressed(GLFW_KEY_SPACE))
+		camera.ProcessKeyboard(UP, delta_time);
+	if (input->IsPressed(GLFW_KEY_C))
+		camera.ProcessKeyboard(DOWN, delta_time);
 }

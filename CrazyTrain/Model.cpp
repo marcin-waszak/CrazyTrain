@@ -22,4 +22,8 @@ void Model::GetUniformLocations() {
 	light_constant_location_ = glGetUniformLocation(shader_->GetProgram(), "light.constant");
 	light_linear_location_ = glGetUniformLocation(shader_->GetProgram(), "light.linear");
 	light_quadratic_location_ = glGetUniformLocation(shader_->GetProgram(), "light.quadratic");
+
+	light_ambient_location_ = glGetUniformLocation(shader_->GetProgram(), "light.ambient");
+	light_difuse_location_ = glGetUniformLocation(shader_->GetProgram(), "light.difuse");
+	light_specular_location_ = glGetUniformLocation(shader_->GetProgram(), "light.specular");
 }
