@@ -92,6 +92,11 @@ void Cube::Draw() const {
 	glUniform3f(light_color_location_, 1.0f, 1.0f, 1.0f);
 	glUniform3fv(light_position_location_, 1, glm::value_ptr(light_position_));
 	glUniform3fv(view_position_location_, 1, glm::value_ptr(camera_->position_));
+	glUniform1f(light_constant_location_, 1.0f);
+//	glUniform1f(light_linear_location_, 0.09);
+	glUniform1f(light_linear_location_, 0.00);
+//	glUniform1f(light_quadratic_location_, 0.032);
+	glUniform1f(light_quadratic_location_, 0.004);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 

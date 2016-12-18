@@ -81,12 +81,12 @@ int main() {
 	srand(time(nullptr));
 
 	std::vector<Cube*> cubes;
-	for (int i = 0; i < 20; ++i)
+	for (int i = 0; i < 2500; ++i)
 		cubes.push_back(new Cube(&shader_cube, &camera, light_position));
 
 	for (auto &cube : cubes) {
 		glm::mat4 trans = glm::translate(glm::mat4(),
-			glm::vec3(-10 + rand() % 20, -10 + rand() % 20, -10 + rand() % 20));
+			glm::vec3(-50 + rand() % 100, -50 + rand() % 100, -50 + rand() % 100));
 		glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 1.f, 0.f));
 		glm::mat4 result = trans *rot;
 		cube->SetModelMatrix(result);
@@ -112,7 +112,7 @@ int main() {
 		do_movement();
 
 		// Clear the colorbuffer
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0.01f, 0.01f, 0.03f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		for (auto &cube : cubes)

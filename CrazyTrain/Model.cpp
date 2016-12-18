@@ -16,7 +16,11 @@ void Model::GetUniformLocations() {
 	projection_location_ = glGetUniformLocation(shader_->GetProgram(), "projection");
 	normal_matrix_location_ = glGetUniformLocation(shader_->GetProgram(), "normal_matrix");
 	object_color_location_ = glGetUniformLocation(shader_->GetProgram(), "objectColor");
-	light_color_location_ = glGetUniformLocation(shader_->GetProgram(), "lightColor");
-	light_position_location_ = glGetUniformLocation(shader_->GetProgram(), "lightPos");
 	view_position_location_ = glGetUniformLocation(shader_->GetProgram(), "viewPos");
+	light_color_location_ = glGetUniformLocation(shader_->GetProgram(), "light.color");
+	light_position_location_ = glGetUniformLocation(shader_->GetProgram(), "light.position");
+	light_constant_location_ = glGetUniformLocation(shader_->GetProgram(), "light.constant");
+	light_linear_location_ = glGetUniformLocation(shader_->GetProgram(), "light.linear");
+	light_quadratic_location_ = glGetUniformLocation(shader_->GetProgram(), "light.quadratic");
+
 }
