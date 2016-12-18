@@ -45,8 +45,9 @@ GLfloat Cube::vertices[] = {
 	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
 };
 
-Cube::Cube(Shader* shader, Camera* camera, glm::vec3 light_position) {
-	shader_ = shader;
+Cube::Cube(Material* material, Camera* camera, glm::vec3 light_position) {
+	material_ = material;
+	shader_ = material_->GetShader();
 	camera_ = camera;
 	light_position_ = light_position;
 
@@ -86,24 +87,7 @@ void Cube::Draw() const {
 	glm::mat4 projection_matrix = camera_->GetProjectionMatrix();
 	glm::mat3 normal_matrix = glm::transpose(glm::inverse(model_));
 
-
-	shader_->Use();
-
-//	glUniformMatrix4fv(model_location_, 1, GL_FALSE, glm::value_ptr(model_));
-//	glUniformMatrix4fv(view_location_, 1, GL_FALSE, glm::value_ptr(view_matrix));
-//	glUniformMatrix4fv(projection_location_, 1, GL_FALSE, glm::value_ptr(projection_matrix));
-//	glUniformMatrix3fv(normal_matrix_location_, 1, GL_FALSE, glm::value_ptr(normal_matrix));
-//	glUniform3f(object_color_location_, 1.0f, 0.5f, 0.81f);
-//	glUniform3f(light_color_location_, 1.0f, 1.0f, 1.0f);
-//	glUniform3fv(light_position_location_, 1, glm::value_ptr(light_position_));
-//	glUniform3fv(view_position_location_, 1, glm::value_ptr(camera_->position_));
-//	glUniform1f(light_constant_location_, 1.0f);
-////	glUniform1f(light_linear_location_, 0.09);
-//	glUniform1f(light_linear_location_, 0.00);
-////	glUniform1f(light_quadratic_location_, 0.032);
-//	glUniform1f(light_quadratic_location_, 0.004);
-
-
+	material_->Use();
 
 	glUniform3fv(light_position_location_, 1, glm::value_ptr(light_position_));
 	glUniform3fv(view_position_location_, 1, glm::value_ptr(camera_->position_));
@@ -123,8 +107,6 @@ void Cube::Draw() const {
 	glUniformMatrix4fv(view_location_, 1, GL_FALSE, glm::value_ptr(view_matrix));
 	glUniformMatrix4fv(projection_location_, 1, GL_FALSE, glm::value_ptr(projection_matrix));
 	glUniformMatrix3fv(normal_matrix_location_, 1, GL_FALSE, glm::value_ptr(normal_matrix));
-
-
 
 	glBindVertexArray(vao_);
 	glDrawArrays(GL_TRIANGLES, 0, 36);

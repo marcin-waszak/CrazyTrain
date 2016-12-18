@@ -76,15 +76,14 @@ void Light::Draw() const {
 	glm::mat4 view_matrix = camera_->GetViewMatrix();
 	glm::mat4 projection_matrix = camera_->GetProjectionMatrix();
 
-	glBindVertexArray(vao_);
+
 	shader_->Use();
 
 	glUniformMatrix4fv(model_location_, 1, GL_FALSE, glm::value_ptr(model_));
 	glUniformMatrix4fv(view_location_, 1, GL_FALSE, glm::value_ptr(view_matrix));
 	glUniformMatrix4fv(projection_location_, 1, GL_FALSE, glm::value_ptr(projection_matrix));
 
+	glBindVertexArray(vao_);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
-
-	// all is drawn - unbind vertex array
 	glBindVertexArray(0);
 }

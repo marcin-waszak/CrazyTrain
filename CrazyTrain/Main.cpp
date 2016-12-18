@@ -19,6 +19,7 @@
 // Other includes
 #include "Input.h"
 #include "Shader.h"
+#include "Material.h"
 #include "Camera.h"
 #include "Cube.h"
 #include "Light.h"
@@ -82,58 +83,15 @@ int main() {
 		"..\\..\\assets\\lamp.vs",
 		"..\\..\\assets\\lamp.frag");
 
-	// TEMPORARY HERE /////////////////////////////////////////////////
-	// Load textures
-	GLuint diffuseMap, specularMap, emissionMap;
-	glGenTextures(1, &diffuseMap);
-	glGenTextures(1, &specularMap);
-	glGenTextures(1, &emissionMap);
-	int width, height;
-	unsigned char* image;
-
-	// Diffuse map
-	image = SOIL_load_image("..\\..\\assets\\container2.png", &width, &height, 0, SOIL_LOAD_RGB);
-	glBindTexture(GL_TEXTURE_2D, diffuseMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	SOIL_free_image_data(image);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-
-	// Specular map
-	image = SOIL_load_image("..\\..\\assets\\container2_specular.png", &width, &height, 0, SOIL_LOAD_RGB);
-	glBindTexture(GL_TEXTURE_2D, specularMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	SOIL_free_image_data(image);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	// Set texture units
-	shader_cube.Use();
-	glUniform1i(glGetUniformLocation(shader_cube.GetProgram(), "material_diffuse"), 0);
-	glUniform1i(glGetUniformLocation(shader_cube.GetProgram(), "material_specular"), 1);
-	glUniform1f(glGetUniformLocation(shader_cube.GetProgram(), "material_shininess"), 32.0f);
-
-	// Bind diffuse map
-	glActiveTexture(GL_TEXTURE0); // here ??????????
-	glBindTexture(GL_TEXTURE_2D, diffuseMap);
-	// Bind specular map
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, specularMap);
-
-	// TEMPORARY HERE /////////////////////////////////////////////////
+	Material box_material(&shader_cube, 32.f,
+		"..\\..\\assets\\container2.png",
+		"..\\..\\assets\\container2_specular.png");
 
 	srand(time(nullptr));
 
 	std::vector<Cube*> cubes;
 	for (int i = 0; i < 2500; ++i)
-		cubes.push_back(new Cube(&shader_cube, &camera, light_position));
+		cubes.push_back(new Cube(&box_material, &camera, light_position));
 
 	int range = 40;
 

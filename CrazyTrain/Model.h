@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Shader.h"
+#include "Material.h"
 #include "Camera.h"
 
 class Model {
@@ -13,6 +13,7 @@ protected:
 	GLuint vbo_;
 
 	Shader* shader_;
+	Material* material_;
 	Camera* camera_; // unnecessary in light class
 	glm::vec3 light_position_;
 
@@ -33,8 +34,6 @@ protected:
 	GLint light_ambient_location_;
 	GLint light_diffuse_location_;
 	GLint light_specular_location_;
-
-
 
 	void GetUniformLocations();
 
