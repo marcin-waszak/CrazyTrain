@@ -75,8 +75,12 @@ int main() {
 	Input* input = Input::getInstance();
 	input->Initialize(&camera);
 
-	Shader shader_cube("basic_lighting.vs", "basic_lighting.frag");
-	Shader shader_light( "lamp.vs", "lamp.frag");
+	Shader shader_cube(
+		"..\\..\\assets\\basic_lighting.vs",
+		"..\\..\\assets\\basic_lighting.frag");
+	Shader shader_light(
+		"..\\..\\assets\\lamp.vs",
+		"..\\..\\assets\\lamp.frag");
 
 	srand(time(nullptr));
 

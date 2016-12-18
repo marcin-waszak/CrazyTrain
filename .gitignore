@@ -34,6 +34,10 @@ $RECYCLE.BIN/
 *.o
 *.obj
 
+# But not these files...
+!*.vs
+!*.frag
+
 # Precompiled Headers
 *.gch
 *.pch
