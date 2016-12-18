@@ -3,9 +3,10 @@
 struct Light {
     vec3 position;
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec3 color;
+    float ambient;
+    float diffuse;
+    float specular;
 
     float constant;
     float linear;
@@ -45,5 +46,5 @@ void main()
     float distance = length(light.position - FragPos);
     float attenuation = 1.0f / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
-    color = vec4((ambient + diffuse + specular) * attenuation, 1.0f);
+    color = vec4((diffuse + specular) * attenuation * light.color + ambient, 1.0f);
 }

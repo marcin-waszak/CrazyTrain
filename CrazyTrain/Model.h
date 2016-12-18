@@ -31,7 +31,7 @@ protected:
 	GLint view_position_location_;
 
 	GLint light_ambient_location_;
-	GLint light_difuse_location_;
+	GLint light_diffuse_location_;
 	GLint light_specular_location_;
 
 

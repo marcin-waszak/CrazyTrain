@@ -108,14 +108,16 @@ void Cube::Draw() const {
 	glUniform3fv(light_position_location_, 1, glm::value_ptr(light_position_));
 	glUniform3fv(view_position_location_, 1, glm::value_ptr(camera_->position_));
 	// Set lights properties
-	glUniform3f(light_ambient_location_, 0.2f, 0.2f, 0.2f);
-	glUniform3f(light_difuse_location_, 0.5f, 0.5f, 0.5f);
-	glUniform3f(light_specular_location_, 1.0f, 1.0f, 1.0f);
-	glUniform1f(light_constant_location_, 1.0f);
+//	glUniform3f(light_color_location_, 1.0f, 0.8f, 0.5f);
+	glUniform3f(light_color_location_, 1.0f, 1.0f, 1.0f);
+	glUniform1f(light_ambient_location_, .03f);
+	glUniform1f(light_diffuse_location_, .8f);
+	glUniform1f(light_specular_location_, 1.f);
+	glUniform1f(light_constant_location_, 1.f);
 	//	glUniform1f(light_linear_location_, 0.09);
 	glUniform1f(light_linear_location_, 0.00);
 	//	glUniform1f(light_quadratic_location_, 0.032);
-	glUniform1f(light_quadratic_location_, 0.002);
+	glUniform1f(light_quadratic_location_, 0.064);
 	// Create camera transformations
 	glUniformMatrix4fv(model_location_, 1, GL_FALSE, glm::value_ptr(model_));
 	glUniformMatrix4fv(view_location_, 1, GL_FALSE, glm::value_ptr(view_matrix));

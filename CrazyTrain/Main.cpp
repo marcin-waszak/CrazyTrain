@@ -135,7 +135,7 @@ int main() {
 	for (int i = 0; i < 2500; ++i)
 		cubes.push_back(new Cube(&shader_cube, &camera, light_position));
 
-	int range = 120;
+	int range = 40;
 
 	for (auto &cube : cubes) {
 		glm::mat4 trans = glm::translate(glm::mat4(),
