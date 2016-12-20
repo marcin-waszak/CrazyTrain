@@ -15,7 +15,6 @@ protected:
 	Shader* shader_;
 	Material* material_;
 	Camera* camera_; // unnecessary in light class
-	glm::vec3 light_position_;
 
 	glm::mat4 model_; // must init !!!!
 
@@ -24,16 +23,8 @@ protected:
 	GLint projection_location_;
 	GLint normal_matrix_location_;
 	GLint object_color_location_;
-	GLint light_color_location_;
-	GLint light_position_location_;
-	GLint light_constant_location_;
-	GLint light_linear_location_;
-	GLint light_quadratic_location_;
-	GLint view_position_location_;
 
-	GLint light_ambient_location_;
-	GLint light_diffuse_location_;
-	GLint light_specular_location_;
+	GLint view_position_location_;
 
 	void GetUniformLocations();
 

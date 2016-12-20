@@ -19,10 +19,10 @@
 // Other includes
 #include "Input.h"
 #include "Shader.h"
+#include "LightsManager.h"
 #include "Material.h"
 #include "Camera.h"
-#include "Cube.h"
-#include "Light.h"
+#include "CubeModel.h"
 
 void do_movement();
 
@@ -33,7 +33,7 @@ const GLuint WIDTH = 1024, HEIGHT = 768;
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
 // Light attributes
-glm::vec3 light_position(1.2f, 1.0f, 2.0f);
+//glm::vec3 light_position(1.2f, 1.0f, 2.0f);
 
 // Deltatime
 GLfloat delta_time = 0.0f;  // Time between current frame and last frame
@@ -77,21 +77,39 @@ int main() {
 	input->Initialize(&camera);
 
 	Shader shader_cube(
-		"..\\..\\assets\\basic_lighting.vs",
-		"..\\..\\assets\\basic_lighting.frag");
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\basic_lighting.vs",
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\basic_lighting.frag");
 	Shader shader_light(
-		"..\\..\\assets\\lamp.vs",
-		"..\\..\\assets\\lamp.frag");
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\lamp.vs",
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\lamp.frag");
 
 	Material box_material(&shader_cube, 32.f,
-		"..\\..\\assets\\container2.png",
-		"..\\..\\assets\\container2_specular.png");
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2.png",
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2_specular.png");
+
+	LightsManager lights(&shader_light, &camera);
+	lights.AddPointLight(glm::vec3(0.7f, 0.2f, 2.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.032f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(10.f, 10.f, 10.f), glm::vec3(1.f, 0.f, 0.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(-10.f, -10.f, 10.f), glm::vec3(0.f, 1.f, 0.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(10.f, -10.f, -10.f), glm::vec3(0.f, 0.f, 1.f), 0.016f, 0.8f, 1.0f);
+
+	// delete it !!!!
+
+	// Positions of the point lights
+	//glm::vec3 pointLightPositions[] = {
+	//	glm::vec3(0.7f,  0.2f,  2.0f),
+	//	//glm::vec3(2.3f, -3.3f, -4.0f),
+	//	//glm::vec3(-4.0f,  2.0f, -12.0f),
+	//	//glm::vec3(0.0f,  0.0f, -3.0f)
+	//};
+
+	// !!!!!!!!!!
 
 	srand(time(nullptr));
 
-	std::vector<Cube*> cubes;
-	for (int i = 0; i < 2500; ++i)
-		cubes.push_back(new Cube(&box_material, &camera, light_position));
+	std::vector<CubeModel*> cubes;
+	for (int i = 0; i < 1500; ++i)
+		cubes.push_back(new CubeModel(&box_material, &camera, lights.GetPointLights()));
 
 	int range = 40;
 
@@ -103,12 +121,12 @@ int main() {
 		cube->SetModelMatrix(result);
 	}
 
-	Light light(&shader_light, &camera);
+//	Light light(&shader_light, &camera);
 
 	glm::mat4 light_model;
-	light_model = glm::translate(light_model, light_position);
-	light_model = glm::scale(light_model, glm::vec3(0.2f)); // Make it a smaller cube
-	light.SetModelMatrix(light_model);
+	//light_model = glm::translate(light_model, light_position);
+	//light_model = glm::scale(light_model, glm::vec3(0.2f)); // Make it a smaller cube
+	//light.SetModelMatrix(light_model);
 	
 	// Game loop
 	while (!glfwWindowShouldClose(window)) {
@@ -123,9 +141,11 @@ int main() {
 		do_movement();
 
 		// Clear the colorbuffer
-		//glClearColor(0.f, 0.f, 0.f, 1.0f);
-		glClearColor(0.01f, 0.01f, 0.03f, 1.0f);
+		glClearColor(0.f, 0.f, 0.f, 1.0f);
+		//glClearColor(0.01f, 0.01f, 0.03f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		lights.Draw();
 
 		for (auto &cube : cubes)
 			cube->Draw();
@@ -133,7 +153,7 @@ int main() {
 		//second_model = glm::rotate(second_model, .02f, glm::vec3(0.f, 1.f, 0.f));
 		//cube2.SetModelMatrix(second_model);
 
-		light.Draw();
+		//light.Draw();
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);

@@ -40,6 +40,7 @@ Material::Material(Shader* shader, GLfloat shiness,
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	shader_->Use();
+
 	glUniform1i(glGetUniformLocation(shader_->GetProgram(), "material_diffuse"), 0);
 	glUniform1i(glGetUniformLocation(shader_->GetProgram(), "material_specular"), 1);
 	glUniform1f(glGetUniformLocation(shader_->GetProgram(), "material_shininess"), shiness);

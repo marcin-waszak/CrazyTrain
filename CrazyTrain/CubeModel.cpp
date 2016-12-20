@@ -1,6 +1,6 @@
-#include "Cube.h"
+#include "CubeModel.h"
 
-GLfloat Cube::vertices[] = {
+GLfloat CubeModel::vertices[] = {
 	// Positions          // Normals           // Texture Coords
 	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
@@ -45,11 +45,10 @@ GLfloat Cube::vertices[] = {
 	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
 };
 
-Cube::Cube(Material* material, Camera* camera, glm::vec3 light_position) {
+CubeModel::CubeModel(Material* material, Camera* camera, std::vector<LightsManager::PointLight>& plights) : plights_(plights) {
 	material_ = material;
 	shader_ = material_->GetShader();
 	camera_ = camera;
-	light_position_ = light_position;
 
 	GetUniformLocations();
 
@@ -77,38 +76,80 @@ Cube::Cube(Material* material, Camera* camera, glm::vec3 light_position) {
 	glBindVertexArray(0);
 }
 
-Cube::~Cube() {
+CubeModel::~CubeModel() {
 	glDeleteVertexArrays(1, &vao_);
 	glDeleteBuffers(1, &vbo_);
 }
 
-void Cube::Draw() const {
+void CubeModel::Draw() const {
 	glm::mat4 view_matrix = camera_->GetViewMatrix();
 	glm::mat4 projection_matrix = camera_->GetProjectionMatrix();
 	glm::mat3 normal_matrix = glm::transpose(glm::inverse(model_));
 
 	material_->Use();
 
-	glUniform3fv(light_position_location_, 1, glm::value_ptr(light_position_));
 	glUniform3fv(view_position_location_, 1, glm::value_ptr(camera_->position_));
-	// Set lights properties
-//	glUniform3f(light_color_location_, 1.0f, 0.8f, 0.5f);
-	glUniform3f(light_color_location_, 1.0f, 1.0f, 1.0f);
-	glUniform1f(light_ambient_location_, .03f);
-	glUniform1f(light_diffuse_location_, .8f);
-	glUniform1f(light_specular_location_, 1.f);
-	glUniform1f(light_constant_location_, 1.f);
-	//	glUniform1f(light_linear_location_, 0.09);
-	glUniform1f(light_linear_location_, 0.00);
-	//	glUniform1f(light_quadratic_location_, 0.032);
-	glUniform1f(light_quadratic_location_, 0.064);
+
 	// Create camera transformations
 	glUniformMatrix4fv(model_location_, 1, GL_FALSE, glm::value_ptr(model_));
 	glUniformMatrix4fv(view_location_, 1, GL_FALSE, glm::value_ptr(view_matrix));
 	glUniformMatrix4fv(projection_location_, 1, GL_FALSE, glm::value_ptr(projection_matrix));
 	glUniformMatrix3fv(normal_matrix_location_, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
+	// Set lights properties
+	for (size_t i = 0; i < plights_.size(); ++i) {
+		glUniform3fv(plight_color_location_[i], 1, glm::value_ptr(plights_[i].color));
+		glUniform3fv(plight_position_location_[i], 1, glm::value_ptr(plights_[i].position));
+		glUniform1f(plight_constant_location_[i], 1.f);
+		glUniform1f(plight_linear_location_[i], 0.f);
+		glUniform1f(plight_quadratic_location_[i], plights_[i].attenuation);
+		glUniform1f(plight_ambient_location_[i], 0.03f);
+		glUniform1f(plight_diffuse_location_[i], plights_[i].diffuse);
+		glUniform1f(plight_specular_location_[i], plights_[i].specular);
+	}
+
 	glBindVertexArray(vao_);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+}
+
+void CubeModel::GetUniformLocations() {
+	Model::GetUniformLocations();
+
+	char buffer[64];
+	GLint location;
+
+	for (size_t i = 0; i < plights_.size(); ++i) {
+		snprintf(buffer, sizeof(buffer), "pointLights[%zu].color", i);
+		location = glGetUniformLocation(shader_->GetProgram(), buffer);
+		plight_color_location_.push_back(location);
+
+		snprintf(buffer, sizeof(buffer), "pointLights[%zu].position", i);
+		location = glGetUniformLocation(shader_->GetProgram(), buffer);
+		plight_position_location_.push_back(location);
+
+		snprintf(buffer, sizeof(buffer), "pointLights[%zu].constant", i);
+		location = glGetUniformLocation(shader_->GetProgram(), buffer);
+		plight_constant_location_.push_back(location);
+
+		snprintf(buffer, sizeof(buffer), "pointLights[%zu].linear", i);
+		location = glGetUniformLocation(shader_->GetProgram(), buffer);
+		plight_linear_location_.push_back(location);
+
+		snprintf(buffer, sizeof(buffer), "pointLights[%zu].quadratic", i);
+		location = glGetUniformLocation(shader_->GetProgram(), buffer);
+		plight_quadratic_location_.push_back(location);
+
+		snprintf(buffer, sizeof(buffer), "pointLights[%zu].ambient", i);
+		location = glGetUniformLocation(shader_->GetProgram(), buffer);
+		plight_ambient_location_.push_back(location);
+
+		snprintf(buffer, sizeof(buffer), "pointLights[%zu].diffuse", i);
+		location = glGetUniformLocation(shader_->GetProgram(), buffer);
+		plight_diffuse_location_.push_back(location);
+
+		snprintf(buffer, sizeof(buffer), "pointLights[%zu].specular", i);
+		location = glGetUniformLocation(shader_->GetProgram(), buffer);
+		plight_specular_location_.push_back(location);
+	}
 }
