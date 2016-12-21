@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/norm.hpp>
 
 #include <vector>
 
@@ -19,7 +20,11 @@ enum CameraMovement {
 // Default camera values
 const GLfloat YAW = -90.0f;
 const GLfloat PITCH = 0.0f;
-const GLfloat SPEED = 16.5f;
+const GLfloat SPEED = 6.0f;
+
+const GLfloat FORCE = 150.f;
+const GLfloat DRAG = 7.f;
+
 const GLfloat SENSITIVTY = 0.5f;
 const GLfloat ZOOM = 45.0f;
 
@@ -34,6 +39,8 @@ public:
 	glm::vec3 up_;
 	glm::vec3 right_;
 	glm::vec3 world_up_;
+	glm::vec3 acceleration_;
+	glm::vec3 velocity_;
 	// Eular Angles
 	GLfloat yaw_;
 	GLfloat pitch_;
@@ -85,20 +92,30 @@ public:
 		return glm::perspective(zoom_, (GLfloat)WIDTH / HEIGHT, 0.1f, 1000.0f);
 	}
 
+	void Move(GLfloat deltaTime) {
+		glm::vec3 drag = -DRAG * velocity_;
+
+		acceleration_ = FORCE * Normalize(acceleration_);
+
+		velocity_ += (acceleration_ + drag) * deltaTime;
+		position_ += velocity_ * deltaTime;
+
+		acceleration_ = glm::vec3();
+	}
+
 	void ProcessKeyboard(CameraMovement direction, GLfloat deltaTime) {
-		GLfloat velocity = movement_speed_ * deltaTime;
 		if (direction == FORWARD)
-			position_ += front_ * velocity;
+			acceleration_ += front_;
 		if (direction == BACKWARD)
-			position_ -= front_ * velocity;
+			acceleration_ -= front_;
 		if (direction == LEFT)
-			position_ -= right_ * velocity;
+			acceleration_ -= right_;
 		if (direction == RIGHT)
-			position_ += right_ * velocity;
+			acceleration_ += right_;
 		if (direction == UP)
-			position_ += glm::vec3(0.f, 1.f, 0.f) * velocity * .5f;
+			acceleration_ += glm::vec3(0.f, 1.f, 0.f);
 		if (direction == DOWN)
-			position_ -= glm::vec3(0.f, 1.f, 0.f) * velocity * .5f;
+			acceleration_ -= glm::vec3(0.f, 1.f, 0.f);
 	}
 
 	void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch = true) {
@@ -143,5 +160,12 @@ private:
 		// which results in slower movement.
 		right_ = glm::normalize(glm::cross(front_, world_up_));
 		up_ = glm::normalize(glm::cross(right_, front_));
+	}
+
+	glm::vec3 Normalize(const glm::vec3& input) {
+		if (glm::length2(input) < 0.0001)
+			return glm::vec3(0.f, 0.f, 0.f);
+
+		return glm::normalize(input);
 	}
 };

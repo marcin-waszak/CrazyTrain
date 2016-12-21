@@ -27,7 +27,7 @@
 void do_movement();
 
 // Window dimensions
-const GLuint WIDTH = 1024, HEIGHT = 768;
+const GLuint WIDTH = 1600, HEIGHT = 900;
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -108,7 +108,7 @@ int main() {
 	srand(time(nullptr));
 
 	std::vector<CubeModel*> cubes;
-	for (int i = 0; i < 1500; ++i)
+	for (int i = 0; i < 1000; ++i)
 		cubes.push_back(new CubeModel(&box_material, &camera, lights.GetPointLights()));
 
 	int range = 40;
@@ -180,4 +180,6 @@ void do_movement() {
 		camera.ProcessKeyboard(UP, delta_time);
 	if (input->IsPressed(GLFW_KEY_C))
 		camera.ProcessKeyboard(DOWN, delta_time);
+
+		camera.Move(delta_time);
 }
