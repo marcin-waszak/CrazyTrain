@@ -93,6 +93,8 @@ int main() {
 	lights.AddPointLight(glm::vec3(-10.f, -10.f, 10.f), glm::vec3(0.f, 1.f, 0.f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(10.f, -10.f, -10.f), glm::vec3(0.f, 0.f, 1.f), 0.016f, 0.8f, 1.0f);
 
+	lights.AddSpotLight(glm::vec3(-10.f, -10.f, -10.f), glm::vec3(10.f, 0.f, 10.f), glm::vec3(1.0f, 1.0f, 0.0f), 0.002f, 0.8f, 1.0f, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(15.0f)));
+
 	// delete it !!!!
 
 	// Positions of the point lights
@@ -109,7 +111,7 @@ int main() {
 
 	std::vector<CubeModel*> cubes;
 	for (int i = 0; i < 1000; ++i)
-		cubes.push_back(new CubeModel(&box_material, &camera, lights.GetPointLights()));
+		cubes.push_back(new CubeModel(&box_material, &camera, lights.GetPointLights(), lights.GetSpotLights()));
 
 	int range = 40;
 

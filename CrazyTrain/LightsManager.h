@@ -30,9 +30,19 @@ public:
 		glm::vec3 position;
 		glm::vec3 color;
 		GLfloat attenuation;
-
 		GLfloat diffuse;
 		GLfloat specular;
+	};
+
+	struct SpotLight {
+		glm::vec3 position;
+		glm::vec3 direction;
+		glm::vec3 color;
+		GLfloat attenuation;
+		GLfloat diffuse;
+		GLfloat specular;
+		GLfloat cutoff;
+		GLfloat outer_cutoff;
 	};
 
 	void AddPointLight(
@@ -41,12 +51,23 @@ public:
 		GLfloat attenuation,
 		GLfloat diffuse,
 		GLfloat specular);
-	/*const */std::vector<LightsManager::PointLight>&  GetPointLights();
+	void AddSpotLight(
+		glm::vec3 position,
+		glm::vec3 direction,
+		glm::vec3 color,
+		GLfloat attenuation,
+		GLfloat diffuse,
+		GLfloat specular,
+		GLfloat cutoff,
+		GLfloat outer_cutoff);
+	/*const */std::vector<PointLight>& GetPointLights();
+	/*const */std::vector<SpotLight>& GetSpotLights();
 
 	void Draw();
 
 private:
 	std::vector<PointLight> point_lights_;
+	std::vector<SpotLight> spot_lights_;
 	LightModel light_model_;
 	glm::mat4 light_matrix_;
 };
