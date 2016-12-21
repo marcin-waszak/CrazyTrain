@@ -118,20 +118,14 @@ public:
 			acceleration_ -= glm::vec3(0.f, 1.f, 0.f);
 	}
 
-	void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch = true) {
+	void ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset) {
 		xoffset *= mouse_sensitivity_;
 		yoffset *= mouse_sensitivity_;
 
 		yaw_ += xoffset;
 		pitch_ += yoffset;
 
-		// Make sure that when pitch is out of bounds, screen doesn't get flipped
-		if (constrainPitch) {
-			if (pitch_ > 89.0f)
-				pitch_ = 89.0f;
-			if (pitch_ < -89.0f)
-				pitch_ = -89.0f;
-		}
+		pitch_ = glm::clamp(pitch_, -89.f, 89.f);
 
 		// Update Front, Right and Up Vectors using the updated Eular angles
 		UpdateCameraVectors();
