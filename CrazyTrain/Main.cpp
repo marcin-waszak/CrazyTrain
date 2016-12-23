@@ -22,6 +22,7 @@
 #include "LightsManager.h"
 #include "Material.h"
 #include "Skybox.h"
+#include "Terrain.h"
 #include "Camera.h"
 #include "CubeModel.h"
 
@@ -91,17 +92,20 @@ int main() {
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2.png",
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2_specular.png");
 
-	Material sky_material(&shader_sky, 1.f,
-		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\nightsky3.jpg",
-		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2_specular.png");
+	Material grass_material(&shader_cube, 32.f,
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\master_grass_dirt3.png");
+
+	Material sky_material(&shader_sky, 0.f,
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\nightsky3.jpg");
 
 	LightsManager lights(&shader_light, &camera);
-	lights.AddPointLight(glm::vec3(0.7f, 0.2f, 2.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.032f, 0.8f, 1.0f);
-	lights.AddPointLight(glm::vec3(10.f, 10.f, 10.f), glm::vec3(1.f, 0.f, 0.f), 0.016f, 0.8f, 1.0f);
-	lights.AddPointLight(glm::vec3(-10.f, -10.f, 10.f), glm::vec3(0.f, 1.f, 0.f), 0.016f, 0.8f, 1.0f);
-	lights.AddPointLight(glm::vec3(10.f, -10.f, -10.f), glm::vec3(0.f, 0.f, 1.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(0.7f, 5.2f, 2.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(0.f, 5.2f, 0.f), glm::vec3(1.f, 0.f, 0.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(-10.f, 5.2f, 10.f), glm::vec3(0.f, 1.f, 0.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(10.f, 5.2f, -10.f), glm::vec3(0.f, 0.f, 1.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(10.f, 5.2f, 10.f), glm::vec3(1.f, .6f, 0.f), 0.016f, 0.8f, 1.0f);
 
-	lights.AddSpotLight(glm::vec3(-10.f, -10.f, -10.f), glm::vec3(10.f, 0.f, 10.f), glm::vec3(1.0f, 1.0f, 0.0f), 0.002f, 0.8f, 1.0f, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(15.0f)));
+	//lights.AddSpotLight(glm::vec3(-10.f, -10.f, -10.f), glm::vec3(10.f, 0.f, 10.f), glm::vec3(1.0f, 1.0f, 0.0f), 0.002f, 0.8f, 1.0f, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(15.0f)));
 
 	// delete it !!!!
 
@@ -119,6 +123,7 @@ int main() {
 
 
 	Skybox skybox(&sky_material, &camera);
+	Terrain terrain(&grass_material, &camera, lights.GetPointLights(), lights.GetSpotLights());
 
 	std::vector<CubeModel*> cubes;
 	for (int i = 0; i < 500; ++i)
@@ -128,9 +133,9 @@ int main() {
 
 	for (auto &cube : cubes) {
 		glm::mat4 trans = glm::translate(glm::mat4(),
-			glm::vec3(-range/2 + rand() % range, -range / 2 + rand() % range, -range / 2 + rand() % range));
-		glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 1.f, 0.0f));
-		glm::mat4 result = trans *rot;
+			glm::vec3(-range/2 + rand() % range, 0.5f + rand() % 3, -range / 2 + rand() % range));
+//		glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 1.f, 0.0f));
+		glm::mat4 result = trans;// *rot;
 		cube->SetModelMatrix(result);
 	}
 
@@ -140,7 +145,9 @@ int main() {
 	//light_model = glm::translate(light_model, light_position);
 	//light_model = glm::scale(light_model, glm::vec3(0.2f)); // Make it a smaller cube
 	//light.SetModelMatrix(light_model);
-	
+
+//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	// Game loop
 	while (!glfwWindowShouldClose(window)) {
 		// Calculate deltatime of current frame
@@ -159,15 +166,12 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		skybox.Draw();
-
 		lights.Draw();
-
-
-
 
 		for (auto &cube : cubes)
 			cube->Draw();
 
+		terrain.Draw();
 		//second_model = glm::rotate(second_model, .02f, glm::vec3(0.f, 1.f, 0.f));
 		//cube2.SetModelMatrix(second_model);
 

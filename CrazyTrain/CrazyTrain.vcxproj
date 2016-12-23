@@ -27,6 +27,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -37,6 +38,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{b52a2438-bda8-4d7a-9a43-6e26d5592609}</ProjectGuid>
