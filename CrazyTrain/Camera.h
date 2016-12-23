@@ -84,6 +84,10 @@ public:
 		UpdateCameraVectors();
 	}
 
+	glm::vec3 GetPosition() {
+		return position_;
+	}
+
 	glm::mat4 GetViewMatrix() {
 		return glm::lookAt(position_, position_ + front_, up_);
 	}

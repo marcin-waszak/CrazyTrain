@@ -72,7 +72,7 @@ LightsManager::LightModel::~LightModel() {
 	glDeleteBuffers(1, &vbo_);
 }
 
-void LightsManager::LightModel::Draw() const {
+void LightsManager::LightModel::Draw() {
 	glm::mat4 view_matrix = camera_->GetViewMatrix();
 	glm::mat4 projection_matrix = camera_->GetProjectionMatrix();
 

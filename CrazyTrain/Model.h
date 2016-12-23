@@ -22,14 +22,12 @@ protected:
 	GLint view_location_;
 	GLint projection_location_;
 	GLint normal_matrix_location_;
-	GLint object_color_location_;
-
 	GLint view_position_location_;
 
 	void GetUniformLocations();
 
 public:
-	virtual void Draw() const = 0;
+	virtual void Draw() = 0;
 	glm::mat4 GetModelMatrix();
 	void SetModelMatrix(glm::mat4 model);
 };

@@ -13,7 +13,7 @@ public:
 	CubeModel(Material* material, Camera* camera, std::vector<LightsManager::PointLight>& plights, std::vector<LightsManager::SpotLight>& slights);
 	~CubeModel();
 
-	void Draw() const override;
+	void Draw() override;
 
 private:
 	void GetUniformLocations();

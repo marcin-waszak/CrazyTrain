@@ -21,6 +21,7 @@
 #include "Shader.h"
 #include "LightsManager.h"
 #include "Material.h"
+#include "Skybox.h"
 #include "Camera.h"
 #include "CubeModel.h"
 
@@ -79,12 +80,19 @@ int main() {
 	Shader shader_cube(
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\basic_lighting.vs",
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\basic_lighting.frag");
+	Shader shader_sky(
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\sky.vs",
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\sky.frag");
 	Shader shader_light(
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\lamp.vs",
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\lamp.frag");
 
 	Material box_material(&shader_cube, 32.f,
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2.png",
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2_specular.png");
+
+	Material sky_material(&shader_sky, 1.f,
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\nightsky3.jpg",
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2_specular.png");
 
 	LightsManager lights(&shader_light, &camera);
@@ -109,8 +117,11 @@ int main() {
 
 	srand(time(nullptr));
 
+
+	Skybox skybox(&sky_material, &camera);
+
 	std::vector<CubeModel*> cubes;
-	for (int i = 0; i < 1000; ++i)
+	for (int i = 0; i < 500; ++i)
 		cubes.push_back(new CubeModel(&box_material, &camera, lights.GetPointLights(), lights.GetSpotLights()));
 
 	int range = 40;
@@ -143,11 +154,16 @@ int main() {
 		do_movement();
 
 		// Clear the colorbuffer
-		glClearColor(0.f, 0.f, 0.f, 1.0f);
-		//glClearColor(0.01f, 0.01f, 0.03f, 1.0f);
+		//glClearColor(0.f, 0.f, 0.f, 1.0f);
+//		glClearColor(0.31f, 0.41f, 0.98f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		skybox.Draw();
+
 		lights.Draw();
+
+
+
 
 		for (auto &cube : cubes)
 			cube->Draw();

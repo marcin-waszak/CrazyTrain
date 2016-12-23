@@ -14,7 +14,7 @@ class LightsManager {
 		LightModel(Shader* shader, Camera* camera);
 		~LightModel();
 
-		void Draw() const override;
+		void Draw() override;
 		void SetColor(glm::vec3 color);
 		void GetUniformLocations();
 

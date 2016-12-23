@@ -81,7 +81,7 @@ CubeModel::~CubeModel() {
 	glDeleteBuffers(1, &vbo_);
 }
 
-void CubeModel::Draw() const {
+void CubeModel::Draw() {
 	glm::mat4 view_matrix = camera_->GetViewMatrix();
 	glm::mat4 projection_matrix = camera_->GetProjectionMatrix();
 	glm::mat3 normal_matrix = glm::transpose(glm::inverse(model_));
