@@ -21,6 +21,7 @@ public:
 
 private:
 	Shader* shader_;
+	GLfloat shiness_;
 	GLuint diffuse_map_;
 	GLuint specular_map_;
 	GLuint normal_map_;

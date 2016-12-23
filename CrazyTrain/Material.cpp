@@ -7,6 +7,7 @@ Material::Material(Shader* shader, GLfloat shiness,
 	unsigned char* image;
 
 	shader_ = shader;
+	shiness_ = shiness;
 
 	if (p_diffuse != nullptr) {
 		glGenTextures(1, &diffuse_map_);
@@ -38,12 +39,6 @@ Material::Material(Shader* shader, GLfloat shiness,
 
 	// bump mapping waits to implement
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	shader_->Use();
-
-	glUniform1i(glGetUniformLocation(shader_->GetProgram(), "material_diffuse"), 0);
-	glUniform1i(glGetUniformLocation(shader_->GetProgram(), "material_specular"), 1);
-	glUniform1f(glGetUniformLocation(shader_->GetProgram(), "material_shininess"), shiness);
 }
 
 Material::~Material() {
@@ -52,6 +47,11 @@ Material::~Material() {
 
 void Material::Use() const {
 	shader_->Use();
+
+	// TODO: optimalize it!
+	glUniform1i(glGetUniformLocation(shader_->GetProgram(), "material_diffuse"), 0);
+	glUniform1i(glGetUniformLocation(shader_->GetProgram(), "material_specular"), 1);
+	glUniform1f(glGetUniformLocation(shader_->GetProgram(), "material_shininess"), shiness_);
 
 	// Bind diffuse map
 	glActiveTexture(GL_TEXTURE0);
