@@ -25,6 +25,7 @@
 #include "Terrain.h"
 #include "Camera.h"
 #include "CubeModel.h"
+#include "CuboidModel.h"
 
 void do_movement();
 
@@ -51,6 +52,7 @@ int main() {
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
+//	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", glfwGetPrimaryMonitor(), nullptr);
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
@@ -101,9 +103,9 @@ int main() {
 	LightsManager lights(&shader_light, &camera);
 	lights.AddPointLight(glm::vec3(0.7f, 5.2f, 2.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(0.f, 5.2f, 0.f), glm::vec3(1.f, 0.f, 0.f), 0.016f, 0.8f, 1.0f);
-	lights.AddPointLight(glm::vec3(-10.f, 5.2f, 10.f), glm::vec3(0.f, 1.f, 0.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(-10.f, 5.2f, 16.f), glm::vec3(0.f, 1.f, 0.f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(10.f, 5.2f, -10.f), glm::vec3(0.f, 0.f, 1.f), 0.016f, 0.8f, 1.0f);
-	lights.AddPointLight(glm::vec3(10.f, 5.2f, 10.f), glm::vec3(1.f, .6f, 0.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(10.f, 5.2f, 16.f), glm::vec3(1.f, .6f, 0.f), 0.016f, 0.8f, 1.0f);
 
 	//lights.AddSpotLight(glm::vec3(-10.f, -10.f, -10.f), glm::vec3(10.f, 0.f, 10.f), glm::vec3(1.0f, 1.0f, 0.0f), 0.002f, 0.8f, 1.0f, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(15.0f)));
 
@@ -126,18 +128,30 @@ int main() {
 	Terrain terrain(&grass_material, &camera, lights.GetPointLights(), lights.GetSpotLights());
 
 	std::vector<CubeModel*> cubes;
-	for (int i = 0; i < 500; ++i)
+	for (int i = 0; i < 200; ++i)
 		cubes.push_back(new CubeModel(&box_material, &camera, lights.GetPointLights(), lights.GetSpotLights()));
 
 	int range = 40;
 
 	for (auto &cube : cubes) {
 		glm::mat4 trans = glm::translate(glm::mat4(),
-			glm::vec3(-range/2 + rand() % range, 0.5f + rand() % 3, -range / 2 + rand() % range));
+			glm::vec3(-range/2 + rand() % range, 0.5f + rand() % 3, -range / 4 + rand() % (range / 2)));
 //		glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 1.f, 0.0f));
 		glm::mat4 result = trans;// *rot;
 		cube->SetModelMatrix(result);
 	}
+
+	CuboidModel xxx(glm::vec3(1.f, 1.f, 1.f), &box_material, &camera, &lights);
+	glm::mat4 trans = glm::translate(glm::mat4(),
+		glm::vec3(0.0f, 2.0f, 15.0f));
+	glm::mat4 result = trans;// *rot;
+	xxx.SetModelMatrix(result);
+
+	CubeModel xxxy(&box_material, &camera, lights.GetPointLights(), lights.GetSpotLights());
+	glm::mat4 trans2 = glm::translate(glm::mat4(),
+		glm::vec3(0.0f, 2.0f, 17.0f));
+	glm::mat4 result2 = trans2;// *rot;
+	xxxy.SetModelMatrix(result2);
 
 //	Light light(&shader_light, &camera);
 
@@ -171,6 +185,9 @@ int main() {
 		for (auto &cube : cubes)
 			cube->Draw();
 
+		xxx.Draw();
+		xxxy.Draw();
+
 		terrain.Draw();
 		//second_model = glm::rotate(second_model, .02f, glm::vec3(0.f, 1.f, 0.f));
 		//cube2.SetModelMatrix(second_model);
@@ -203,5 +220,5 @@ void do_movement() {
 	if (input->IsPressed(GLFW_KEY_C))
 		camera.ProcessKeyboard(DOWN, delta_time);
 
-		camera.Move(delta_time);
+	camera.Move(delta_time);
 }

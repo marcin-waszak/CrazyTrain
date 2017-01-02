@@ -16,6 +16,8 @@ public:
 	void Draw() override;
 
 private:
+	GLuint vbo_;
+
 	void GetUniformLocations();
 
 	std::vector<LightsManager::PointLight>& plights_;

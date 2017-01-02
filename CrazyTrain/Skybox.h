@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 class Skybox : public Model {
+	GLuint vbo_;
 	static GLfloat vertices[];
 
 public:

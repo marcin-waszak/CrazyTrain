@@ -10,7 +10,6 @@
 class Model {
 protected:
 	GLuint vao_;
-	GLuint vbo_;
 
 	Shader* shader_;
 	Material* material_;

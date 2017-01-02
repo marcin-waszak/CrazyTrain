@@ -3,21 +3,26 @@
 #include "Model.h"
 #include "LightsManager.h"
 
-class Terrain : public Model {
-	GLuint vbo_;
-	static GLfloat vertices[];
-
+class CuboidModel : public Model {
+	GLfloat vertices_[108];
+	GLfloat normals_[108];
+//	GLfloat texture_[72];
 public:
-	Terrain(Material* material, Camera* camera, std::vector<LightsManager::PointLight>& plights, std::vector<LightsManager::SpotLight>& slights);
-	~Terrain();
+	CuboidModel(glm::vec3 dimensions,
+		Material* material,
+		Camera* camera,
+		LightsManager* lights_manager);
 
+	~CuboidModel();
 	void Draw() override;
 
 private:
 	void GetUniformLocations();
 
-	std::vector<LightsManager::PointLight>& plights_;
-	std::vector<LightsManager::SpotLight>& slights_;
+	GLuint vbo_vertices_;
+	GLuint vbo_normals_;
+	GLuint vbo_texture_;
+	LightsManager* lights_manager_;
 
 	std::vector<GLint> plight_color_location_;
 	std::vector<GLint> plight_position_location_;
@@ -40,4 +45,3 @@ private:
 	std::vector<GLint> slight_cutoff_location_;
 	std::vector<GLint> slight_outer_cutoff_location_;
 };
-

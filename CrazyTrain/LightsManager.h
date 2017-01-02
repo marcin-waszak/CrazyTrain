@@ -19,6 +19,7 @@ class LightsManager {
 		void GetUniformLocations();
 
 	private:
+		GLuint vbo_;
 		glm::vec3 color_;
 		GLint color_location_;
 	};
