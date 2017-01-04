@@ -52,6 +52,7 @@ public:
 		GLfloat attenuation,
 		GLfloat diffuse,
 		GLfloat specular);
+
 	void AddSpotLight(
 		glm::vec3 position,
 		glm::vec3 direction,

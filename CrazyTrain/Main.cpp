@@ -26,6 +26,7 @@
 #include "Camera.h"
 #include "CubeModel.h"
 #include "CuboidModel.h"
+#include "ConeModel.h"
 
 void do_movement();
 
@@ -52,8 +53,8 @@ int main() {
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-//	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", glfwGetPrimaryMonitor(), nullptr);
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", glfwGetPrimaryMonitor(), nullptr);
+//	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 
@@ -106,6 +107,7 @@ int main() {
 	lights.AddPointLight(glm::vec3(-10.f, 5.2f, 16.f), glm::vec3(0.f, 1.f, 0.f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(10.f, 5.2f, -10.f), glm::vec3(0.f, 0.f, 1.f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(10.f, 5.2f, 16.f), glm::vec3(1.f, .6f, 0.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(5.f, 2.4f, 42.f), glm::vec3(1.f, 1.f, 1.f), 0.016f, 0.8f, 1.0f);
 
 	//lights.AddSpotLight(glm::vec3(-10.f, -10.f, -10.f), glm::vec3(10.f, 0.f, 10.f), glm::vec3(1.0f, 1.0f, 0.0f), 0.002f, 0.8f, 1.0f, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(15.0f)));
 
@@ -141,10 +143,11 @@ int main() {
 		cube->SetModelMatrix(result);
 	}
 
-	CuboidModel xxx(glm::vec3(1.f, 1.f, 1.f), &box_material, &camera, &lights);
+	ConeModel xxx(1.f, 1.f, 1.f, &box_material, &camera, &lights);
 	glm::mat4 trans = glm::translate(glm::mat4(),
-		glm::vec3(0.0f, 2.0f, 15.0f));
-	glm::mat4 result = trans;// *rot;
+		glm::vec3(0.0f, 0.0f, 38.0f));
+	glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 0.f, 1.0f));
+	glm::mat4 result = trans *rot;
 	xxx.SetModelMatrix(result);
 
 	CubeModel xxxy(&box_material, &camera, lights.GetPointLights(), lights.GetSpotLights());

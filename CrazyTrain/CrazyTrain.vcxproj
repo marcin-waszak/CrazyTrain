@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConeModel.cpp" />
     <ClCompile Include="CubeModel.cpp" />
     <ClCompile Include="CuboidModel.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -32,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ConeModel.h" />
     <ClInclude Include="CubeModel.h" />
     <ClInclude Include="CuboidModel.h" />
     <ClInclude Include="Input.h" />
