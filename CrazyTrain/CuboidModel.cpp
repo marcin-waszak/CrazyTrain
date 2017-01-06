@@ -129,6 +129,7 @@ CuboidModel::CuboidModel(glm::vec3 dimensions,
 	glGenVertexArrays(1, &vao_);
 	glGenBuffers(1, &vbo_vertices_);
 	glGenBuffers(1, &vbo_normals_);
+	glGenBuffers(1, &vbo_texture_);
 
 	glBindVertexArray(vao_);
 

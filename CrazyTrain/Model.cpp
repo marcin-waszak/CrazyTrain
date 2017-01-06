@@ -4,8 +4,27 @@ glm::mat4 Model::GetModelMatrix() {
 	return model_;
 }
 
-void Model::SetModelMatrix(glm::mat4 model) {
-	model_ = model;
+void Model::SetInitRotation(GLfloat angle, glm::vec3 axis) {
+	init_rotation_ = glm::rotate(glm::mat4(), glm::radians(angle), axis);
+	UpdateModelMatrix();
+}
+
+void Model::SetInitTranslation(glm::vec3 translation) {
+	init_translation_ = glm::translate(glm::mat4(), translation);
+	UpdateModelMatrix();
+}
+
+void Model::SetRotation(GLfloat angle, glm::vec3 axis) {
+	rotation_ = glm::rotate(glm::mat4(), glm::radians(angle), axis);
+}
+
+void Model::SetTranslation(glm::vec3 translation) {
+	translation_ = glm::translate(glm::mat4(), translation);
+}
+
+void Model::UpdateModelMatrix() {
+	// correct order: TRS
+	model_ = translation_ * init_translation_ * rotation_ * init_rotation_;
 }
 
 void Model::GetUniformLocations() {

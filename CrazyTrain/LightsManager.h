@@ -62,8 +62,8 @@ public:
 		GLfloat specular,
 		GLfloat cutoff,
 		GLfloat outer_cutoff);
-	/*const */std::vector<PointLight>& GetPointLights();
-	/*const */std::vector<SpotLight>& GetSpotLights();
+	std::vector<PointLight>& GetPointLights();
+	std::vector<SpotLight>& GetSpotLights();
 
 	void Draw();
 
@@ -71,5 +71,4 @@ private:
 	std::vector<PointLight> point_lights_;
 	std::vector<SpotLight> spot_lights_;
 	LightModel light_model_;
-	glm::mat4 light_matrix_;
 };

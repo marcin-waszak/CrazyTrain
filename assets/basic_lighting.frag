@@ -81,8 +81,8 @@ void main()
     for(int i = 0; i < NR_SPOT_LIGHTS; i++)
         result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);
 
-    color = vec4(result /*+ ambient*/, 1.0);
-    //color = vec4(vec3(texture(material_diffuse, TexCoords)), 1.0); // for development purposes only
+    //color = vec4(result /*+ ambient*/, 1.0);
+    color = vec4(vec3(texture(material_diffuse, TexCoords)), 1.0); // for development purposes only
 }
 
 // Calculates the color when using a point light.

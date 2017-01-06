@@ -132,9 +132,9 @@ ConeModel::ConeModel(
 		normals_[3 * i + 2] = vertex.z;
 	}
 
-	GLfloat texture[2 * 2 * 3 * 3 * CONE_SEGMENTS];
+	GLfloat texture[2 * 2 * 3 * 2 * CONE_SEGMENTS];
 
-	for (int i = 0; i < 2 * 3 * CONE_SEGMENTS; ++i) {
+	for (int i = 0; i < 2 * 2 * CONE_SEGMENTS; ++i) {
 		texture[6 * i + 0] = 0.0f;
 		texture[6 * i + 1] = 0.0f;
 
@@ -152,24 +152,25 @@ ConeModel::ConeModel(
 	glGenVertexArrays(1, &vao_);
 	glGenBuffers(1, &vbo_vertices_);
 	glGenBuffers(1, &vbo_normals_);
+	glGenBuffers(1, &vbo_texture_);
 
 	glBindVertexArray(vao_);
 
 	// Vertices
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices_);
-	glBufferData(GL_ARRAY_BUFFER, 2 * 2 * 3 * 3 * CONE_SEGMENTS * sizeof(GLfloat), vertices_, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_), vertices_, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
 	// Normals
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_normals_);
-	glBufferData(GL_ARRAY_BUFFER, 2 * 2 * 3 * 3 * CONE_SEGMENTS * sizeof(GLfloat), normals_, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normals_), normals_, GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);
 
 	// Texture
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_texture_);
-	glBufferData(GL_ARRAY_BUFFER, 2 * 2 * 3 * 3 * CONE_SEGMENTS * sizeof(GLfloat), texture, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(texture), texture, GL_STATIC_DRAW);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(2);
 
@@ -230,7 +231,7 @@ void ConeModel::Draw() {
 	}
 
 	glBindVertexArray(vao_);
-	glDrawArrays(GL_TRIANGLES, 0, 2 * 2 * 3 * CONE_SEGMENTS);
+	glDrawArrays(GL_TRIANGLES, 0, 3 * 4 * CONE_SEGMENTS);
 	glBindVertexArray(0);
 }
 

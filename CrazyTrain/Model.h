@@ -15,7 +15,12 @@ protected:
 	Material* material_;
 	Camera* camera_; // unnecessary in light class
 
-	glm::mat4 model_; // must init !!!!
+	glm::mat4 model_;
+
+	glm::mat4 init_rotation_;
+	glm::mat4 init_translation_;
+	glm::mat4 rotation_;
+	glm::mat4 translation_;
 
 	GLint model_location_;
 	GLint view_location_;
@@ -28,5 +33,9 @@ protected:
 public:
 	virtual void Draw() = 0;
 	glm::mat4 GetModelMatrix();
-	void SetModelMatrix(glm::mat4 model);
+	void SetInitRotation(GLfloat angle, glm::vec3 axis);
+	void SetInitTranslation(glm::vec3 translation);
+	void SetRotation(GLfloat angle, glm::vec3 axis);
+	void SetTranslation(glm::vec3 translation);
+	void UpdateModelMatrix();
 };

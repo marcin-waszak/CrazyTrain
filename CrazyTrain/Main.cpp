@@ -27,6 +27,7 @@
 #include "CubeModel.h"
 #include "CuboidModel.h"
 #include "ConeModel.h"
+#include "TrainAssembly.h"
 
 void do_movement();
 
@@ -136,25 +137,26 @@ int main() {
 	int range = 40;
 
 	for (auto &cube : cubes) {
-		glm::mat4 trans = glm::translate(glm::mat4(),
-			glm::vec3(-range/2 + rand() % range, 0.5f + rand() % 3, -range / 4 + rand() % (range / 2)));
+		glm::vec3 trans =  glm::vec3(-range/2 + rand() % range, 0.5f + rand() % 3, -range / 4 + rand() % (range / 2));
 //		glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 1.f, 0.0f));
-		glm::mat4 result = trans;// *rot;
-		cube->SetModelMatrix(result);
+//		glm::mat4 result = trans;// *rot;
+		cube->SetInitTranslation(trans);
 	}
 
-	ConeModel xxx(1.f, 1.f, 1.f, &box_material, &camera, &lights);
-	glm::mat4 trans = glm::translate(glm::mat4(),
-		glm::vec3(0.0f, 0.0f, 38.0f));
-	glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 0.f, 1.0f));
-	glm::mat4 result = trans *rot;
-	xxx.SetModelMatrix(result);
+	//ConeModel xxx(1.f, 1.f, 1.f, &box_material, &camera, &lights);
+	//glm::mat4 trans = glm::translate(glm::mat4(),
+	//	glm::vec3(0.0f, 0.0f, 38.0f));
+	//glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 0.f, 1.0f));
+	//glm::mat4 result = trans *rot;
+	//xxx.SetModelMatrix(result);
 
-	CubeModel xxxy(&box_material, &camera, lights.GetPointLights(), lights.GetSpotLights());
-	glm::mat4 trans2 = glm::translate(glm::mat4(),
-		glm::vec3(0.0f, 2.0f, 17.0f));
-	glm::mat4 result2 = trans2;// *rot;
-	xxxy.SetModelMatrix(result2);
+	//CubeModel xxxy(&box_material, &camera, lights.GetPointLights(), lights.GetSpotLights());
+	//glm::mat4 trans2 = glm::translate(glm::mat4(),
+	//	glm::vec3(0.0f, 2.0f, 17.0f));
+	//glm::mat4 result2 = trans2;// *rot;
+	//xxxy.SetModelMatrix(result2);
+
+	TrainAssembly train(&camera, &lights);
 
 //	Light light(&shader_light, &camera);
 
@@ -185,11 +187,12 @@ int main() {
 		skybox.Draw();
 		lights.Draw();
 
-		for (auto &cube : cubes)
-			cube->Draw();
+		//for (auto &cube : cubes)
+		//	cube->Draw();
 
-		xxx.Draw();
-		xxxy.Draw();
+		//xxx.Draw();
+		//xxxy.Draw();
+		train.Draw();
 
 		terrain.Draw();
 		//second_model = glm::rotate(second_model, .02f, glm::vec3(0.f, 1.f, 0.f));
