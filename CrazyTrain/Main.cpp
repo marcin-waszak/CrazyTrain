@@ -55,8 +55,8 @@ int main() {
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-//	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", glfwGetPrimaryMonitor(), nullptr);
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", glfwGetPrimaryMonitor(), nullptr);
+//	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 
@@ -83,50 +83,36 @@ int main() {
 	Input* input = Input::getInstance();
 	input->Initialize(&camera);
 
-	Shader shader_cube(
-		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\basic_lighting.vs",
-		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\basic_lighting.frag");
-	Shader shader_sky(
-		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\sky.vs",
-		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\sky.frag");
-	Shader shader_light(
-		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\lamp.vs",
-		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\lamp.frag");
+	Shader shader_standard(
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\standard.vs",
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\standard.frag");
+	Shader shader_nonshading(
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\nonshading.vs",
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\nonshading.frag");
 
-	Material box_material(&shader_cube, 32.f,
+	Material box_material(&shader_standard, 32.f,
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2.png",
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2_specular.png");
 
-	Material grass_material(&shader_cube, 32.f,
+	Material grass_material(&shader_standard, 32.f,
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\master_grass_dirt3.png");
 
+	Shader shader_sky(
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\sky.vs",
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\sky.frag");
 	Material sky_material(&shader_sky, 0.f,
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\nightsky3.jpg");
 
-	LightsManager lights(&shader_light, &camera);
+	LightsManager lights(&shader_nonshading, &camera);
 	lights.AddPointLight(glm::vec3(0.7f, 5.2f, 2.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(30.f, 5.2f, 30.f), glm::vec3(1.f, 0.f, 0.f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(-10.f, 5.2f, 16.f), glm::vec3(0.f, 1.f, 0.f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(10.f, 5.2f, -10.f), glm::vec3(0.f, 0.f, 1.f), 0.0016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(10.f, 5.2f, 16.f), glm::vec3(1.f, .6f, 0.f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(5.f, 2.4f, 42.f), glm::vec3(1.f, 1.f, 1.f), 0.016f, 0.8f, 1.0f);
-
-	lights.AddSpotLight(glm::vec3(-10.f, 5.2f, -10.f), glm::vec3(0.5f, -0.25f, -0.5f), glm::vec3(1.0f, 1.0f, 0.0f), 0.016f, 0.8f, 1.0f, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(15.0f)));
-
-	// delete it !!!!
-
-	// Positions of the point lights
-	//glm::vec3 pointLightPositions[] = {
-	//	glm::vec3(0.7f,  0.2f,  2.0f),
-	//	//glm::vec3(2.3f, -3.3f, -4.0f),
-	//	//glm::vec3(-4.0f,  2.0f, -12.0f),
-	//	//glm::vec3(0.0f,  0.0f, -3.0f)
-	//};
-
-	// !!!!!!!!!!
+	lights.AddSpotLight(glm::vec3(-10.f, 5.2f, -10.f), glm::vec3(0.5f, -0.25f, -0.5f), glm::vec3(1.0f, 0.8f, 0.5f), 0.002f, 0.8f, 1.0f, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(15.0f)));
 
 	srand(time(nullptr));
-
 
 	Skybox skybox(&sky_material, &camera);
 	Terrain terrain(&grass_material, &camera, lights.GetPointLights(), lights.GetSpotLights());
@@ -135,37 +121,17 @@ int main() {
 	for (int i = 0; i < 200; ++i)
 		cubes.push_back(new CubeModel(&box_material, &camera, lights.GetPointLights(), lights.GetSpotLights()));
 
-	int range = 40;
+	int range = 70;
 
 	for (auto &cube : cubes) {
-		glm::vec3 trans =  glm::vec3(-range/2 + rand() % range, 0.5f + rand() % 3, -range / 4 + rand() % (range / 2));
-//		glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 1.f, 0.0f));
-//		glm::mat4 result = trans;// *rot;
+		glm::vec3 trans =  glm::vec3(range/8 + rand() % (range/2), 0.5f + rand() % 3, -range / 2 + rand() % range);;
 		cube->SetInitTranslation(trans);
 	}
 
-	//ConeModel xxx(1.f, 1.f, 1.f, &box_material, &camera, &lights);
-	//glm::mat4 trans = glm::translate(glm::mat4(),
-	//	glm::vec3(0.0f, 0.0f, 38.0f));
-	//glm::mat4 rot = glm::rotate(glm::mat4(), 45.f, glm::vec3(0.f, 0.f, 1.0f));
-	//glm::mat4 result = trans *rot;
-	//xxx.SetModelMatrix(result);
-
-	//CubeModel xxxy(&box_material, &camera, lights.GetPointLights(), lights.GetSpotLights());
-	//glm::mat4 trans2 = glm::translate(glm::mat4(),
-	//	glm::vec3(0.0f, 2.0f, 17.0f));
-	//glm::mat4 result2 = trans2;// *rot;
-	//xxxy.SetModelMatrix(result2);
-
-	RailsAssemly rails(&camera, &lights);
-	TrainAssembly train(&camera, &lights);
-
-//	Light light(&shader_light, &camera);
+	RailsAssemly rails(&camera, &lights, &shader_standard);
+	TrainAssembly train(&camera, &lights, &shader_standard);
 
 	glm::mat4 light_model;
-	//light_model = glm::translate(light_model, light_position);
-	//light_model = glm::scale(light_model, glm::vec3(0.2f)); // Make it a smaller cube
-	//light.SetModelMatrix(light_model);
 
 //	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -181,27 +147,16 @@ int main() {
 		glfwPollEvents();
 		do_movement();
 
-		// Clear the colorbuffer
-		//glClearColor(0.f, 0.f, 0.f, 1.0f);
-//		glClearColor(0.31f, 0.41f, 0.98f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		skybox.Draw();
 		lights.Draw();
-
-		//for (auto &cube : cubes)
-		//	cube->Draw();
-
-		//xxx.Draw();
-		//xxxy.Draw();
+		terrain.Draw();
 		rails.Draw();
 		train.Draw();
 
-		terrain.Draw();
-		//second_model = glm::rotate(second_model, .02f, glm::vec3(0.f, 1.f, 0.f));
-		//cube2.SetModelMatrix(second_model);
-
-		//light.Draw();
+		for (auto &cube : cubes)
+			cube->Draw();
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);

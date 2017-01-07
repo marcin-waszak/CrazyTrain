@@ -4,10 +4,10 @@
 #include "ConeModel.h"
 
 class TrainAssembly {
-	Shader shader_cube_;
-	Material box_material_;
+	Material wheel_material_;
+	Material rod_material_;
+	Material platform_material_;
 	glm::vec3 translation_;
-
 	glm::vec3 position_;
 
 	ConeModel wheel1_;
@@ -21,7 +21,7 @@ class TrainAssembly {
 	CuboidModel platform_;
 
 public:
-	TrainAssembly(Camera* camera, LightsManager* lights_manager);
+	TrainAssembly(Camera* camera, LightsManager* lights_manager, Shader* shader);
 	~TrainAssembly();
 
 	void AnimationTick();

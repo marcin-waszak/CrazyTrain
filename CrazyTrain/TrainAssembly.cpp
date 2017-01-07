@@ -1,19 +1,22 @@
 #include "TrainAssembly.h"
 
-TrainAssembly::TrainAssembly(Camera* camera, LightsManager* lights_manager)
-	: shader_cube_(
-		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\basic_lighting.vs",
-		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\basic_lighting.frag"),
-	box_material_(&shader_cube_, 32.f,
+TrainAssembly::TrainAssembly(Camera* camera, LightsManager* lights_manager, Shader* shader)
+	: wheel_material_(shader, 32.f,
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2.png",
 		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\container2_specular.png"),
-	wheel1_(.5f, .5f, .1f, &box_material_, camera, lights_manager),
-	wheel2_(.5f, .5f, .1f, &box_material_, camera, lights_manager),
-	wheel3_(.5f, .5f, .1f, &box_material_, camera, lights_manager),
-	wheel4_(.5f, .5f, .1f, &box_material_, camera, lights_manager),
-	connecting_rod1_(glm::vec3(.05f, .05f, 3.05f), &box_material_, camera, lights_manager),
-	connecting_rod2_(glm::vec3(.05f, .05f, 3.05f), &box_material_, camera, lights_manager),
-	platform_(glm::vec3(1.9f, .2f, 5.f), &box_material_, camera, lights_manager) {
+	rod_material_(shader, 32.f,
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\ametal_m01.jpg",
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\specular.png"),
+	platform_material_(shader, 32.f,
+		"C:\\Users\\Marcin\\Documents\\Visual Studio 2015\\Projects\\CrazyTrain\\assets\\wood_m01_usat.jpg"),
+
+	wheel1_(.5f, .5f, .1f, &wheel_material_, camera, lights_manager),
+	wheel2_(.5f, .5f, .1f, &wheel_material_, camera, lights_manager),
+	wheel3_(.5f, .5f, .1f, &wheel_material_, camera, lights_manager),
+	wheel4_(.5f, .5f, .1f, &wheel_material_, camera, lights_manager),
+	connecting_rod1_(glm::vec3(.05f, .05f, 3.05f), &rod_material_, camera, lights_manager),
+	connecting_rod2_(glm::vec3(.05f, .05f, 3.05f), &rod_material_, camera, lights_manager),
+	platform_(glm::vec3(1.9f, .2f, 5.f), &platform_material_, camera, lights_manager) {
 
 	wheel1_.SetInitRotation(90.f, glm::vec3(0.f, 0.f, 1.0f));
 	wheel1_.SetInitTranslation(glm::vec3(1.f, .6f, 1.5f));
