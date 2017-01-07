@@ -27,6 +27,7 @@
 #include "CubeModel.h"
 #include "CuboidModel.h"
 #include "ConeModel.h"
+#include "RailsAssemly.h"
 #include "TrainAssembly.h"
 
 void do_movement();
@@ -54,8 +55,8 @@ int main() {
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", glfwGetPrimaryMonitor(), nullptr);
-//	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", nullptr, nullptr);
+//	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", glfwGetPrimaryMonitor(), nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crazy Train", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 
@@ -104,13 +105,13 @@ int main() {
 
 	LightsManager lights(&shader_light, &camera);
 	lights.AddPointLight(glm::vec3(0.7f, 5.2f, 2.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.016f, 0.8f, 1.0f);
-	lights.AddPointLight(glm::vec3(0.f, 5.2f, 0.f), glm::vec3(1.f, 0.f, 0.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(30.f, 5.2f, 30.f), glm::vec3(1.f, 0.f, 0.f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(-10.f, 5.2f, 16.f), glm::vec3(0.f, 1.f, 0.f), 0.016f, 0.8f, 1.0f);
-	lights.AddPointLight(glm::vec3(10.f, 5.2f, -10.f), glm::vec3(0.f, 0.f, 1.f), 0.016f, 0.8f, 1.0f);
+	lights.AddPointLight(glm::vec3(10.f, 5.2f, -10.f), glm::vec3(0.f, 0.f, 1.f), 0.0016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(10.f, 5.2f, 16.f), glm::vec3(1.f, .6f, 0.f), 0.016f, 0.8f, 1.0f);
 	lights.AddPointLight(glm::vec3(5.f, 2.4f, 42.f), glm::vec3(1.f, 1.f, 1.f), 0.016f, 0.8f, 1.0f);
 
-	//lights.AddSpotLight(glm::vec3(-10.f, -10.f, -10.f), glm::vec3(10.f, 0.f, 10.f), glm::vec3(1.0f, 1.0f, 0.0f), 0.002f, 0.8f, 1.0f, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(15.0f)));
+	lights.AddSpotLight(glm::vec3(-10.f, 5.2f, -10.f), glm::vec3(0.5f, -0.25f, -0.5f), glm::vec3(1.0f, 1.0f, 0.0f), 0.016f, 0.8f, 1.0f, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(15.0f)));
 
 	// delete it !!!!
 
@@ -156,6 +157,7 @@ int main() {
 	//glm::mat4 result2 = trans2;// *rot;
 	//xxxy.SetModelMatrix(result2);
 
+	RailsAssemly rails(&camera, &lights);
 	TrainAssembly train(&camera, &lights);
 
 //	Light light(&shader_light, &camera);
@@ -192,6 +194,7 @@ int main() {
 
 		//xxx.Draw();
 		//xxxy.Draw();
+		rails.Draw();
 		train.Draw();
 
 		terrain.Draw();

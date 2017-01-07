@@ -11,26 +11,26 @@ TrainAssembly::TrainAssembly(Camera* camera, LightsManager* lights_manager)
 	wheel2_(.5f, .5f, .1f, &box_material_, camera, lights_manager),
 	wheel3_(.5f, .5f, .1f, &box_material_, camera, lights_manager),
 	wheel4_(.5f, .5f, .1f, &box_material_, camera, lights_manager),
-	connecting_rod1_(glm::vec3(.05f, .05f, 3.05f), &box_material_, camera, lights_manager), 
-	connecting_rod2_(glm::vec3(.05, .05f, 3.05f), &box_material_, camera, lights_manager),
+	connecting_rod1_(glm::vec3(.05f, .05f, 3.05f), &box_material_, camera, lights_manager),
+	connecting_rod2_(glm::vec3(.05f, .05f, 3.05f), &box_material_, camera, lights_manager),
 	platform_(glm::vec3(1.9f, .2f, 5.f), &box_material_, camera, lights_manager) {
 
 	wheel1_.SetInitRotation(90.f, glm::vec3(0.f, 0.f, 1.0f));
-	wheel1_.SetInitTranslation(glm::vec3(1.f, .5f, 1.5f));
+	wheel1_.SetInitTranslation(glm::vec3(1.f, .6f, 1.5f));
 
 	wheel2_.SetInitRotation(90.f, glm::vec3(0.f, 0.f, 1.0f));
-	wheel2_.SetInitTranslation(glm::vec3(-1.f, .5f, 1.5f));
+	wheel2_.SetInitTranslation(glm::vec3(-1.f, .6f, 1.5f));
 
 	wheel3_.SetInitRotation(90.f, glm::vec3(0.f, 0.f, 1.0f));
-	wheel3_.SetInitTranslation(glm::vec3(1.0f, .5f, -1.5f));
+	wheel3_.SetInitTranslation(glm::vec3(1.0f, .6f, -1.5f));
 
 	wheel4_.SetInitRotation(90.f, glm::vec3(0.f, 0.f, 1.0f));
-	wheel4_.SetInitTranslation(glm::vec3(-1.0f, .5f, -1.5f));
+	wheel4_.SetInitTranslation(glm::vec3(-1.0f, .6f, -1.5f));
 
-	connecting_rod1_.SetInitTranslation(glm::vec3(1.025, 0.475f, 0.f));
-	connecting_rod2_.SetInitTranslation(glm::vec3(-1.125, 0.475f, 0.f));
+	connecting_rod1_.SetInitTranslation(glm::vec3(1.025, 0.575f, 0.f));
+	connecting_rod2_.SetInitTranslation(glm::vec3(-1.125, 0.575f, 0.f));
 
-	platform_.SetInitTranslation(glm::vec3(-.05f, 0.5f - 0.2/2, 0.f));
+	platform_.SetInitTranslation(glm::vec3(-.05f, 0.6f - 0.2/2, 0.f));
 }
 
 TrainAssembly::~TrainAssembly() {

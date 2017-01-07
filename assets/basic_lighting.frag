@@ -29,7 +29,7 @@ struct SpotLight {
 };
 
 #define NR_POINT_LIGHTS 6
-#define NR_SPOT_LIGHTS 0
+#define NR_SPOT_LIGHTS 1
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -81,8 +81,8 @@ void main()
     for(int i = 0; i < NR_SPOT_LIGHTS; i++)
         result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);
 
-    //color = vec4(result /*+ ambient*/, 1.0);
-    color = vec4(vec3(texture(material_diffuse, TexCoords)), 1.0); // for development purposes only
+    color = vec4(result /*+ ambient*/, 1.0);
+    //color = vec4(vec3(texture(material_diffuse, TexCoords)), 1.0); // for development purposes only
 }
 
 // Calculates the color when using a point light.

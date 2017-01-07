@@ -4,7 +4,6 @@
 #include "ConeModel.h"
 
 class TrainAssembly {
-
 	Shader shader_cube_;
 	Material box_material_;
 	glm::vec3 translation_;
@@ -24,8 +23,9 @@ class TrainAssembly {
 public:
 	TrainAssembly(Camera* camera, LightsManager* lights_manager);
 	~TrainAssembly();
-	glm::vec3 GetPosition();
 
 	void AnimationTick();
 	void Draw();
+
+	glm::vec3 GetPosition();
 };
