@@ -29,20 +29,10 @@
 #include "RailsAssemly.h"
 #include "TrainAssembly.h"
 
-void do_movement();
+void do_movement(GLfloat delta_time, Camera* camera);
 
 // Window dimensions
 const GLuint WIDTH = 1600, HEIGHT = 900;
-
-// Camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-
-// Light attributes
-//glm::vec3 light_position(1.2f, 1.0f, 2.0f);
-
-// Deltatime
-GLfloat delta_time = 0.0f;  // Time between current frame and last frame
-GLfloat last_frame = 0.0f;  // Time of last frame
 
 int main() {
 	// Init GLFW
@@ -79,6 +69,8 @@ int main() {
 	// OpenGL options
 	glEnable(GL_DEPTH_TEST);
 
+	// Camera
+	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 	Input* input = Input::getInstance();
 	input->Initialize(&camera);
 
@@ -134,6 +126,10 @@ int main() {
 
 //	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+// Deltatime
+	GLfloat delta_time = 0.0f;  // Time between current frame and last frame
+	GLfloat last_frame = 0.0f;  // Time of last frame
+
 	// Game loop
 	while (!glfwWindowShouldClose(window)) {
 		// Calculate deltatime of current frame
@@ -144,7 +140,7 @@ int main() {
 		// Check if any events have been activiated (key pressed, mouse moved etc.)
 		// and call corresponding response functions
 		glfwPollEvents();
-		do_movement();
+		do_movement(delta_time, &camera);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -166,22 +162,22 @@ int main() {
 	return 0;
 }
 
-void do_movement() {
+void do_movement(GLfloat delta_time, Camera* camera) {
 	Input* input = Input::getInstance();
 
 	// Camera controls
 	if (input->IsPressed(GLFW_KEY_W))
-		camera.ProcessKeyboard(FORWARD, delta_time);
+		camera->ProcessKeyboard(FORWARD, delta_time);
 	if (input->IsPressed(GLFW_KEY_S))
-		camera.ProcessKeyboard(BACKWARD, delta_time);
+		camera->ProcessKeyboard(BACKWARD, delta_time);
 	if (input->IsPressed(GLFW_KEY_A))
-		camera.ProcessKeyboard(LEFT, delta_time);
+		camera->ProcessKeyboard(LEFT, delta_time);
 	if (input->IsPressed(GLFW_KEY_D))
-		camera.ProcessKeyboard(RIGHT, delta_time);
+		camera->ProcessKeyboard(RIGHT, delta_time);
 	if (input->IsPressed(GLFW_KEY_SPACE))
-		camera.ProcessKeyboard(UP, delta_time);
+		camera->ProcessKeyboard(UP, delta_time);
 	if (input->IsPressed(GLFW_KEY_C))
-		camera.ProcessKeyboard(DOWN, delta_time);
+		camera->ProcessKeyboard(DOWN, delta_time);
 
-	camera.Move(delta_time);
+	camera->Move(delta_time);
 }
