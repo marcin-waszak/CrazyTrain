@@ -24,7 +24,6 @@
 #include "Skybox.h"
 #include "Terrain.h"
 #include "Camera.h"
-#include "CubeModel.h"
 #include "CuboidModel.h"
 #include "ConeModel.h"
 #include "RailsAssemly.h"
@@ -117,14 +116,14 @@ int main() {
 	Skybox skybox(&sky_material, &camera);
 	Terrain terrain(&grass_material, &camera, lights.GetPointLights(), lights.GetSpotLights());
 
-	std::vector<CubeModel*> cubes;
+	std::vector<CuboidModel*> cubes;
 	for (int i = 0; i < 200; ++i)
-		cubes.push_back(new CubeModel(&box_material, &camera, lights.GetPointLights(), lights.GetSpotLights()));
+		cubes.push_back(new CuboidModel(glm::vec3(1.f,1.f,1.f), &box_material, &camera, &lights));
 
 	int range = 70;
 
 	for (auto &cube : cubes) {
-		glm::vec3 trans =  glm::vec3(range/8 + rand() % (range/2), 0.5f + rand() % 3, -range / 2 + rand() % range);;
+		glm::vec3 trans =  glm::vec3(range/8 + rand() % (range/2), rand() % 3, -range / 2 + rand() % range);;
 		cube->SetInitTranslation(trans);
 	}
 
